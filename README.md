@@ -2,9 +2,20 @@
 
 A comprehensive, open-source personal operating system that brings harmony, focus, and connection to every aspect of your life. Built with Next.js 16, TypeScript, Tailwind CSS, and Prisma.
 
+## Screenshots
+
+| Public landing page                                                              | Dashboard                                                                 |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| <img src="./public/screenshots/landing.jpg" alt="Life OS public landing page" /> | <img src="./public/screenshots/dashboard.jpeg" alt="Life OS dashboard" /> |
+
+| Digital Brain graph                                                                   | Insights                                                                    |
+| ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| <img src="./public/screenshots/brain-graph.jpeg" alt="Life OS digital brain graph" /> | <img src="./public/screenshots/insight.jpeg" alt="Life OS insights view" /> |
+
 ## ✨ Features
 
 ### The Digital Brain
+
 Everything is an interconnected "node" — tasks, notes, journals, habits, finances, contacts, ideas, goals, and more. Bi-directional linking means your data comes alive.
 
 - **17 item types** with type-aware UI (tasks, journals, habits, finances, contacts, books, movies, etc.)
@@ -13,41 +24,52 @@ Everything is an interconnected "node" — tasks, notes, journals, habits, finan
 - **8 life domains** — Mind & Soul, Time & Action, Health, Wealth, Network, Growth, Creativity, Admin
 
 ### Master Calendar
+
 One calendar that auto-aggregates anything with a date — tasks, bills, appointments, birthdays. Toggle layers to view your life through different lenses.
 
 ### Quick Capture (⌘K)
+
 Capture a thought instantly without deciding where it belongs. Process your inbox later with bulk actions or AI-powered Smart Inbox Processing.
 
 ### Focus Timer
+
 Pomodoro timer with custom durations, sound on completion, and automatic habit logging. Connect a focus session to a habit like "Read 20 pages" and it auto-logs when the timer ends.
 
 ### Rich Journal Editor
+
 Full-page WYSIWYG editor with formatting toolbar, live word count, mood tracking, and auto-save drafts. Your thoughts deserve more than a text box.
 
 ### Reviews & Reflections
+
 Daily and weekly guided reflections with mood/energy tracking, wins, challenges, gratitude, and priorities. The dashboard gently prompts you when it's time to reflect.
 
 ### Insights Dashboard
+
 Mood trends, habit consistency heatmaps, 30-day activity flow, financial health, and project progress — all visualized.
 
 ### Sanctuary
+
 A calm space for guided breathing exercises, daily affirmations, and life visions.
 
 ### Authentication
+
 - Email/password registration and login
 - Optional 2FA (TOTP) — off by default, toggle in Settings
 - QR code login — sign in on another device by scanning a QR code from Settings
 - Protected routes via middleware
 
 ### AI Features (Optional)
+
 - **Smart Inbox Processing** — AI suggests type, domain, and project for inbox items
 - Configurable AI provider: Z.AI SDK (default, free), OpenAI-compatible (OpenAI, Groq, Together, etc.), or custom endpoint
 - Can be turned on/off in Settings
 
 ### PWA Support
+
 Installable on desktop and mobile. Works as a standalone app.
 
 ### More
+
 - Keyboard shortcuts (⌘K capture, ⌘P command palette, g+key Vim navigation, ? for help)
 - Browser notifications for overdue tasks
 - Onboarding flow for new users
@@ -59,6 +81,7 @@ Installable on desktop and mobile. Works as a standalone app.
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ or Bun
 - A database (SQLite by default, PostgreSQL optional)
 
@@ -104,6 +127,7 @@ Open [http://localhost:3000](http://localhost:3000) and create an account.
 ## 📖 Documentation
 
 ### Architecture
+
 - **Framework**: Next.js 16 with App Router
 - **Language**: TypeScript 5
 - **Styling**: Tailwind CSS 4 + shadcn/ui
@@ -113,6 +137,7 @@ Open [http://localhost:3000](http://localhost:3000) and create an account.
 - **AI**: Z.AI SDK (default) or any OpenAI-compatible API
 
 ### Project Structure
+
 ```
 src/
 ├── app/                    # Next.js App Router
@@ -133,21 +158,22 @@ src/
 ```
 
 ### Keyboard Shortcuts
-| Shortcut | Action |
-|----------|--------|
-| `⌘K` | Quick Capture |
-| `⌘P` | Command Palette |
-| `/` | Focus search |
-| `?` | Show shortcuts |
-| `g` then `d` | Dashboard |
-| `g` then `i` | Inbox |
-| `g` then `c` | Calendar |
-| `g` then `f` | Focus |
-| `g` then `p` | Projects |
-| `g` then `g` | Brain Graph |
-| `g` then `r` | Reviews |
-| `g` then `s` | Insights |
-| `g` then `n` | Sanctuary |
+
+| Shortcut     | Action          |
+| ------------ | --------------- |
+| `⌘K`         | Quick Capture   |
+| `⌘P`         | Command Palette |
+| `/`          | Focus search    |
+| `?`          | Show shortcuts  |
+| `g` then `d` | Dashboard       |
+| `g` then `i` | Inbox           |
+| `g` then `c` | Calendar        |
+| `g` then `f` | Focus           |
+| `g` then `p` | Projects        |
+| `g` then `g` | Brain Graph     |
+| `g` then `r` | Reviews         |
+| `g` then `s` | Insights        |
+| `g` then `n` | Sanctuary       |
 
 ## 🐳 Docker
 
@@ -163,9 +189,11 @@ docker run -p 3000:3000 -v $(pwd)/db:/app/db life-os
 ## 🔧 Configuration
 
 ### Environment Variables
+
 See [`.env.example`](.env.example) for all available options.
 
 ### AI Provider Setup
+
 1. Go to Settings → AI Features
 2. Choose your provider:
    - **Z.AI SDK** — free, no config needed
