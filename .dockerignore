@@ -1,0 +1,13 @@
+.git
+.github
+.next
+node_modules
+db
+.env
+.env*.local
+.DS_Store
+*.log
+qa-*.png
+before-*.png
+after-*.png
+screenshot-*.png

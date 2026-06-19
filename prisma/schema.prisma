@@ -1,0 +1,213 @@
+// Life OS — Digital Brain schema
+// Everything is an interconnected "Item" node that can be linked to Projects and to each other.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User (authentication) ───────────────────────────────────────────────────
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String?
+  passwordHash String
+  totpSecret   String?   // encrypted TOTP secret for 2FA
+  totpVerified Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// ─── Life Domains ────────────────────────────────────────────────────────────
+// Eight domains: Mind & Soul, Time & Action, Health & Body, Wealth & Career,
+// Network, Growth, Creativity & Joy, Admin
+model Domain {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  name        String
+  description String?
+  icon        String?
+  color       String   @default("#71717a")
+  accent      String?  // tailwind-ish accent token
+  order       Int      @default(0)
+  items       Item[]
+  projects    Project[]
+  createdAt   DateTime @default(now())
+}
+
+// ─── Universal Item (the "Digital Brain" node) ───────────────────────────────
+// A single model represents tasks, notes, journal entries, habits, events,
+// finances, contacts, ideas, goals, documents, bookmarks, milestones, etc.
+// Type-specific data lives in a JSON `metadata` string.
+model Item {
+  id          String   @id @default(cuid())
+  type        String   // task | note | journal | habit | event | finance | contact | idea | goal | document | bookmark | milestone | routine | symptom | medication | affirmation | vision
+  title       String
+  content     String?  // markdown / rich text body
+  domainId    String?
+  domain      Domain?  @relation(fields: [domainId], references: [id], onDelete: SetNull)
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  status      String   @default("active") // inbox | active | done | archived | snoozed
+  priority    Int      @default(0) // 0 none, 1 low, 2 medium, 3 high, 4 urgent
+  energy      Int      @default(0) // 0 none, 1 low, 2 medium, 3 high
+
+  startDate   DateTime?
+  dueDate     DateTime?
+  scheduledAt DateTime?
+  completedAt DateTime?
+
+  metadata    String?  // JSON string for type-specific fields
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  linksFrom   Link[]   @relation("LinkFrom")
+  linksTo     Link[]   @relation("LinkTo")
+  tags        TagOnItem[]
+  reviewItems ReviewItem[]
+  habitLogs   HabitLog[]
+  reminders   Reminder[]
+
+  @@index([type])
+  @@index([status])
+  @@index([domainId])
+  @@index([projectId])
+  @@index([dueDate])
+  @@index([scheduledAt])
+}
+
+// ─── Project / Thread ────────────────────────────────────────────────────────
+// A container that aggregates related items into a unified dashboard.
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  color       String   @default("#71717a")
+  icon        String?
+  domainId    String?
+  domain      Domain?  @relation(fields: [domainId], references: [id], onDelete: SetNull)
+  status      String   @default("active") // active | paused | completed | archived
+  progress    Int      @default(0) // 0-100
+  startDate   DateTime?
+  targetDate  DateTime?
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items       Item[]
+
+  @@index([status])
+  @@index([domainId])
+}
+
+// ─── Bi-directional Link ─────────────────────────────────────────────────────
+model Link {
+  id        String   @id @default(cuid())
+  fromId    String
+  toId      String
+  type      String   @default("related") // related | blocks | parent | subtask | references | depends-on
+  note      String?
+  createdAt DateTime @default(now())
+
+  from      Item     @relation("LinkFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  to        Item     @relation("LinkTo", fields: [toId], references: [id], onDelete: Cascade)
+
+  @@unique([fromId, toId, type])
+  @@index([fromId])
+  @@index([toId])
+}
+
+// ─── Tags ────────────────────────────────────────────────────────────────────
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String   @default("#71717a")
+  items     TagOnItem[]
+  createdAt DateTime @default(now())
+}
+
+model TagOnItem {
+  itemId String
+  tagId  String
+  item   Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([itemId, tagId])
+}
+
+// ─── Habit Logs ──────────────────────────────────────────────────────────────
+model HabitLog {
+  id        String   @id @default(cuid())
+  itemId    String
+  date      DateTime
+  value     Int      @default(1)
+  note      String?
+  createdAt DateTime @default(now())
+
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, date])
+  @@index([itemId, date])
+}
+
+// ─── Reviews & Reflections ───────────────────────────────────────────────────
+model Review {
+  id         String   @id @default(cuid())
+  type       String   // daily | weekly | monthly
+  date       DateTime
+  status     String   @default("completed") // pending | in_progress | completed
+  weekStart  DateTime?
+  weekEnd    DateTime?
+
+  wins       String?
+  challenges String?
+  learnings  String?
+  priorities String? // JSON array string
+  gratitude  String?
+  mood       Int?
+  energy     Int?
+  notes      String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  items      ReviewItem[]
+
+  @@index([type, date])
+}
+
+model ReviewItem {
+  reviewId String
+  itemId   String
+  note     String?
+  review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  item     Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@id([reviewId, itemId])
+}
+
+// ─── Reminders ───────────────────────────────────────────────────────────────
+model Reminder {
+  id        String   @id @default(cuid())
+  itemId    String
+  remindAt  DateTime
+  type      String   @default("notification")
+  sent      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([remindAt])
+}
+
+// ─── Settings (key-value) ────────────────────────────────────────────────────
+model Setting {
+  id    String @id
+  value String
+}

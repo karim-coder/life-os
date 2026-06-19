@@ -1,0 +1,341 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ─── MDXEditor rich text editor theming ─── */
+.rich-text-editor-wrapper .mdxeditor {
+  border: 0 !important;
+  background: transparent !important;
+  font-family: inherit !important;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] {
+  outline: none !important;
+  min-height: 300px;
+  padding: 0 !important;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--foreground);
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] p {
+  margin: 0.5em 0;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] h1 {
+  font-size: 1.6em;
+  font-weight: 700;
+  margin: 0.8em 0 0.4em;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] h2 {
+  font-size: 1.35em;
+  font-weight: 700;
+  margin: 0.7em 0 0.35em;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] h3 {
+  font-size: 1.15em;
+  font-weight: 600;
+  margin: 0.6em 0 0.3em;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] ul,
+.rich-text-editor-wrapper .mdxeditor [contenteditable] ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] li {
+  margin: 0.2em 0;
+  list-style-position: outside;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] ul > li {
+  list-style-type: disc;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] ol > li {
+  list-style-type: decimal;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] blockquote {
+  border-left: 3px solid #a78bfa;
+  padding-left: 1em;
+  margin: 0.5em 0;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] code {
+  background: var(--muted);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] pre {
+  background: var(--muted);
+  padding: 0.75em 1em;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 0.5em 0;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] strong {
+  font-weight: 700;
+}
+
+.rich-text-editor-wrapper .mdxeditor [contenteditable] em {
+  font-style: italic;
+}
+
+/* Toolbar styling */
+.rich-text-editor-wrapper .mdxeditor-toolbar {
+  background: var(--muted) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 4px !important;
+  margin-bottom: 8px !important;
+  gap: 2px !important;
+  flex-wrap: wrap !important;
+}
+
+.rich-text-editor-wrapper .mdxeditor-toolbar button,
+.rich-text-editor-wrapper .mdxeditor-toolbar [role="combobox"],
+.rich-text-editor-wrapper .mdxeditor-toolbar [role="radio"] {
+  color: var(--muted-foreground) !important;
+  background: transparent !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  font-size: 13px !important;
+  border: 1px solid transparent !important;
+  cursor: pointer !important;
+}
+
+.rich-text-editor-wrapper .mdxeditor-toolbar button:hover,
+.rich-text-editor-wrapper .mdxeditor-toolbar [role="combobox"]:hover,
+.rich-text-editor-wrapper .mdxeditor-toolbar [role="radio"]:hover {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.rich-text-editor-wrapper .mdxeditor-toolbar button[data-active="true"],
+.rich-text-editor-wrapper .mdxeditor-toolbar [role="radio"][data-checked="true"] {
+  background: var(--background) !important;
+  color: #a78bfa !important;
+}
+
+/* Block type dropdown trigger */
+.rich-text-editor-wrapper .mdxeditor-toolbar [role="combobox"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  min-width: 90px !important;
+  justify-content: space-between !important;
+}
+
+/* ─── MDXEditor dropdown popover content (rendered in portal) ─── */
+[data-radix-popper-content-wrapper] .mdxeditor-toolbar-dropdown-content,
+.mdxeditor-toolbar-dropdown-content,
+[data-radix-popper-content-wrapper] .mdxeditor-select-content,
+.mdxeditor-select-content,
+[data-radix-select-content] {
+  background: var(--popover) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important;
+  padding: 4px !important;
+  z-index: 100 !important;
+  color: var(--foreground) !important;
+}
+
+[data-radix-popper-content-wrapper] .mdxeditor-toolbar-dropdown-content button,
+.mdxeditor-toolbar-dropdown-content button,
+[data-radix-popper-content-wrapper] .mdxeditor-select-content button,
+.mdxeditor-select-content button,
+[data-radix-select-content] button,
+[data-radix-select-content] [role="option"] {
+  background: transparent !important;
+  color: var(--foreground) !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+  width: 100% !important;
+  text-align: left !important;
+  cursor: pointer !important;
+}
+
+[data-radix-popper-content-wrapper] .mdxeditor-toolbar-dropdown-content button:hover,
+.mdxeditor-toolbar-dropdown-content button:hover,
+[data-radix-popper-content-wrapper] .mdxeditor-select-content button:hover,
+.mdxeditor-select-content button:hover,
+[data-radix-select-content] button:hover,
+[data-radix-select-content] [role="option"]:hover,
+[data-radix-select-content] [data-highlighted] {
+  background: var(--muted) !important;
+  color: var(--foreground) !important;
+}
+
+[data-radix-popper-content-wrapper] .mdxeditor-toolbar-dropdown-content button[data-active="true"],
+.mdxeditor-toolbar-dropdown-content button[data-active="true"],
+[data-radix-select-content] [data-state="checked"] {
+  background: var(--muted) !important;
+  color: #a78bfa !important;
+}
+
+/* Link dialog */
+.mdxeditor-link-dialog {
+  background: var(--popover) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  color: var(--foreground) !important;
+}
+
+.mdxeditor-link-dialog input {
+  background: var(--background) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
+  border-radius: 4px !important;
+}
+

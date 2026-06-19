@@ -1,0 +1,22 @@
+{
+  "name": "Life OS — Your Digital Brain",
+  "short_name": "Life OS",
+  "description": "A personal operating system with bi-directional linking, master calendar, quick capture, and automated reviews.",
+  "start_url": "/app",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#10b981",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='42' fill='%2310b981'/%3E%3Cpath d='M96 40c-20 0-36 16-36 36 0 8 3 16 8 22-12 4-20 16-20 30 0 18 14 32 32 32h32c18 0 32-14 32-32 0-14-8-26-20-30 5-6 8-14 8-22 0-20-16-36-36-36z' fill='white'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%2310b981'/%3E%3Cpath d='M256 107c-53 0-96 43-96 96 0 21 8 43 21 57-32 11-53 43-53 80 0 48 37 85 85 85h85c48 0 85-37 85-85 0-37-21-69-53-80 13-14 21-36 21-57 0-53-43-96-95-96z' fill='white'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
