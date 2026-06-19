@@ -1,12 +1,15 @@
 {
   "name": "Life OS — Your Digital Brain",
   "short_name": "Life OS",
-  "description": "A personal operating system with bi-directional linking, master calendar, quick capture, and automated reviews.",
+  "description": "An open-source, self-hostable personal operating system and digital brain for tasks, notes, journals, habits, finances, calendar planning, and reflections.",
+  "id": "/",
   "start_url": "/app",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#10b981",
   "orientation": "any",
+  "categories": ["productivity", "utilities"],
   "icons": [
     {
       "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='42' fill='%2310b981'/%3E%3Cpath d='M96 40c-20 0-36 16-36 36 0 8 3 16 8 22-12 4-20 16-20 30 0 18 14 32 32 32h32c18 0 32-14 32-32 0-14-8-26-20-30 5-6 8-14 8-22 0-20-16-36-36-36z' fill='white'/%3E%3C/svg%3E",

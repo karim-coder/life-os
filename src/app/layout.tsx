@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryProvider } from "@/components/query-provider";
+import { siteConfig } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,11 +18,56 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Life OS — Your Digital Brain",
-  description: "A personal operating system that brings harmony, focus, and connection to every aspect of your life. Interconnected tasks, notes, journal, habits, finances, and reflections.",
-  keywords: ["Life OS", "personal knowledge management", "digital brain", "productivity", "second brain"],
-  authors: [{ name: "Life OS" }],
+  metadataBase: new URL(siteConfig.repositoryUrl),
+  title: {
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  applicationName: siteConfig.name,
+  keywords: siteConfig.keywords,
+  authors: [{ name: siteConfig.author, url: siteConfig.repositoryUrl }],
+  creator: siteConfig.author,
+  publisher: siteConfig.author,
+  category: "Productivity",
+  classification: "Open-source productivity software",
   manifest: "/manifest.json",
+  alternates: {
+    canonical: siteConfig.repositoryUrl,
+  },
+  openGraph: {
+    type: "website",
+    url: siteConfig.repositoryUrl,
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    locale: "en_US",
+    images: [
+      {
+        url: siteConfig.ogImage,
+        width: 2058,
+        height: 1338,
+        alt: "Life OS public landing page and app preview",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

@@ -2,6 +2,8 @@
 
 A comprehensive, open-source personal operating system that brings harmony, focus, and connection to every aspect of your life. Built with Next.js 16, TypeScript, Tailwind CSS, and Prisma.
 
+Life OS is for people looking for an open-source second brain, self-hosted productivity app, personal knowledge management system, digital brain, habit tracker app, journal app, task manager, daily planner, goal tracker, focus timer, calendar planner, finance tracker, and connected life dashboard.
+
 ## Screenshots
 
 | Public landing page                                                              | Dashboard                                                                 |
@@ -204,6 +206,10 @@ See [`.env.example`](.env.example) for all available options.
 ## 🤝 Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## 🔎 GitHub Discoverability
+
+Recommended repository topics: `life-os`, `second-brain`, `digital-brain`, `personal-knowledge-management`, `productivity`, `self-hosted`, `habit-tracker`, `journal-app`, `task-manager`, `calendar-planner`, `finance-tracker`, `goal-tracker`, `focus-timer`, `knowledge-graph`, `nextjs`, `prisma`, `pwa`.
 
 ## 📄 License
 

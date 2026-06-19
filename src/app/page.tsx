@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SmoothHashScroller, SmoothScrollLink } from "@/components/smooth-scroll-link";
+import { siteConfig } from "@/lib/seo";
+import type { Metadata } from "next";
 import {
   AlertTriangle,
   ArrowRight,
@@ -33,16 +35,76 @@ import {
   Zap,
 } from "lucide-react";
 
-export const metadata = {
-  title: "Life OS — Your Digital Brain for a Harmonious Life",
-  description: "A personal operating system that brings harmony, focus, and connection to every aspect of your life. Interconnected tasks, notes, journal, habits, finances, and reflections.",
+export const metadata: Metadata = {
+  title: siteConfig.title,
+  description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  alternates: {
+    canonical: siteConfig.repositoryUrl,
+  },
+  openGraph: {
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: siteConfig.repositoryUrl,
+    images: [
+      {
+        url: siteConfig.ogImage,
+        width: 2058,
+        height: 1338,
+        alt: "Life OS public landing page and app preview",
+      },
+    ],
+  },
 };
 
-const GITHUB_URL = "https://github.com/karim-coder/life-os";
+const softwareJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: siteConfig.name,
+  alternateName: [
+    "Open-source second brain",
+    "Self-hosted personal operating system",
+    "Digital brain app",
+    "Habit tracker app",
+    "Journal app",
+    "Task manager",
+    "Personal productivity dashboard",
+  ],
+  applicationCategory: "ProductivityApplication",
+  operatingSystem: "Any",
+  description: siteConfig.description,
+  url: siteConfig.repositoryUrl,
+  codeRepository: siteConfig.repositoryUrl,
+  license: `${siteConfig.repositoryUrl}/blob/main/LICENSE`,
+  isAccessibleForFree: true,
+  programmingLanguage: ["TypeScript", "JavaScript"],
+  runtimePlatform: "Next.js",
+  keywords: siteConfig.keywords.join(", "),
+  featureList: [
+    "Habit tracker with streaks and weekly heatmaps",
+    "Journal app with mood tracking and reflections",
+    "Task manager with priorities, due dates, and inbox capture",
+    "Master calendar for tasks, bills, appointments, and events",
+    "Digital brain graph for linked notes, tasks, goals, habits, and projects",
+    "Focus timer with Pomodoro sessions and habit logging",
+    "Finance tracker for income, expenses, bills, and goals",
+    "Personal knowledge management with connected life domains",
+  ],
+  screenshot: siteConfig.screenshotUrls,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+};
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+      />
       <SmoothHashScroller />
       {/* ─── Nav ─── */}
       <nav data-public-nav className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/70 backdrop-blur-xl">
@@ -60,7 +122,7 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" className="gap-1.5 px-3" asChild>
-              <a href={GITHUB_URL} target="_blank" rel="noreferrer" aria-label="View Life OS on GitHub">
+              <a href={siteConfig.repositoryUrl} target="_blank" rel="noreferrer" aria-label="View Life OS on GitHub">
                 <Github className="h-4 w-4" />
                 <span className="hidden sm:inline">GitHub</span>
               </a>
@@ -101,6 +163,10 @@ export default function LandingPage() {
             Life OS is a personal operating system where tasks, notes, journals, habits, and finances
             aren't isolated silos — they're a <span className="font-medium text-foreground">digital brain</span> where everything links together.
           </p>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+            Use it as a habit tracker, journal app, task manager, focus timer, master calendar,
+            finance tracker, goal tracker, and second brain in one open-source workspace.
+          </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/app">
@@ -114,7 +180,7 @@ export default function LandingPage() {
               </Button>
             </SmoothScrollLink>
             <Button size="lg" variant="ghost" className="h-12 gap-2 px-6 text-base" asChild>
-              <a href={GITHUB_URL} target="_blank" rel="noreferrer">
+              <a href={siteConfig.repositoryUrl} target="_blank" rel="noreferrer">
                 <Github className="h-5 w-5" /> View source
               </a>
             </Button>
@@ -565,7 +631,7 @@ export default function LandingPage() {
             </Button>
           </Link>
           <Button size="lg" variant="outline" className="ml-0 mt-3 h-14 gap-2 px-8 text-base sm:ml-3 sm:mt-0" asChild>
-            <a href={GITHUB_URL} target="_blank" rel="noreferrer">
+            <a href={siteConfig.repositoryUrl} target="_blank" rel="noreferrer">
               <Github className="h-5 w-5" /> GitHub <ExternalLink className="h-4 w-4" />
             </a>
           </Button>
@@ -586,7 +652,7 @@ export default function LandingPage() {
             <SmoothScrollLink href="#features" className="hover:text-foreground">Features</SmoothScrollLink>
             <SmoothScrollLink href="#domains" className="hover:text-foreground">Domains</SmoothScrollLink>
             <SmoothScrollLink href="#philosophy" className="hover:text-foreground">Philosophy</SmoothScrollLink>
-            <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-foreground">
+            <a href={siteConfig.repositoryUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-foreground">
               <Github className="h-3.5 w-3.5" /> GitHub
             </a>
             <Link href="/app" className="hover:text-foreground">Open app</Link>

@@ -1,0 +1,27 @@
+# Life OS
+
+Life OS is an open-source, self-hostable personal operating system and digital brain.
+
+Repository: https://github.com/karim-coder/life-os
+License: MIT
+Primary language: TypeScript
+Framework: Next.js
+Database: Prisma with SQLite by default
+
+## Summary
+
+Life OS helps people manage tasks, notes, journals, habits, finances, calendar events, projects, contacts, goals, reflections, and life domains in one connected system. It can be described as a habit tracker, journal app, task manager, goal tracker, focus timer, calendar planner, finance tracker, second brain, personal knowledge management system, and digital brain.
+
+## Main features
+
+- Digital Brain graph with linked tasks, notes, journals, projects, goals, and habits.
+- Master calendar for tasks, bills, appointments, and scheduled items.
+- Quick capture inbox for ideas and tasks.
+- Habit tracking with streaks and heatmaps, focus timer, journal editor, daily reviews, weekly reviews, and insights.
+- Self-hostable authentication with optional two-factor authentication.
+- Optional AI smart inbox processing.
+- PWA support and Docker support.
+
+## Useful search terms
+
+open-source second brain, self-hosted productivity app, personal knowledge management, digital brain, life operating system, habit tracker app, open source habit tracker, self hosted habit tracker, daily habit tracker, habit streak tracker, journal app, open source journal app, daily journal app, digital journal, task manager, open source task manager, daily planner app, calendar planner, finance tracker, goal tracker, focus timer, Pomodoro timer, knowledge graph, personal dashboard, Next.js productivity app.
