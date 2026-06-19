@@ -9,6 +9,9 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/life_os
+      SESSION_SECRET: github-actions-ci-secret
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
