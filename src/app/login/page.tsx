@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Brain, ArrowRight, Shield, Check, Loader2, QrCode, X, Lock, Mail, Zap } from "lucide-react";
+import { Brain, ArrowRight, Shield, Check, Loader2, QrCode, X, Lock, Mail, PlayCircle, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Step = "auth" | "verify" | "qr-confirm" | "done";
+const DEMO_EMAIL = "demo@gmail.com";
+const DEMO_PASSWORD = "Password123";
 
 export default function LoginPage() {
   const [step, setStep] = useState<Step>("auth");
@@ -69,6 +71,13 @@ export default function LoginPage() {
       setTimeout(() => { window.location.href = "/app"; }, 800);
     } catch { setError("Network error"); }
     finally { setLoading(false); }
+  }
+
+  function fillDemoCredentials() {
+    setMode("login");
+    setEmail(DEMO_EMAIL);
+    setPassword(DEMO_PASSWORD);
+    setError("");
   }
 
   return (
@@ -191,6 +200,23 @@ export default function LoginPage() {
                       </>
                     )}
                   </Button>
+                  {mode === "login" && (
+                    <div className="space-y-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        disabled={loading}
+                        onClick={fillDemoCredentials}
+                        className="h-11 w-full gap-2"
+                      >
+                        <PlayCircle className="h-4 w-4" />
+                        Fill demo credentials
+                      </Button>
+                      <p className="text-center text-[10px] text-muted-foreground">
+                        Uses demo@gmail.com with Password123
+                      </p>
+                    </div>
+                  )}
                 </form>
 
                 {/* Features list */}

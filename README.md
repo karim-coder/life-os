@@ -4,6 +4,14 @@ A comprehensive, open-source personal operating system that brings harmony, focu
 
 Life OS is for people looking for an open-source second brain, self-hosted productivity app, personal knowledge management system, digital brain, habit tracker app, journal app, task manager, daily planner, goal tracker, focus timer, calendar planner, finance tracker, and connected life dashboard.
 
+## Live Demo
+
+Try Life OS at [life-os-me.vercel.app](https://life-os-me.vercel.app/).
+
+Demo account:
+- Email: `demo@gmail.com`
+- Password: `Password123`
+
 ## Screenshots
 
 | Public landing page                                                              | Dashboard                                                                 |

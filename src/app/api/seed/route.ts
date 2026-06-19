@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { ok, bad, getUserFromRequest } from "@/lib/auth-utils";
+import { ok, bad } from "@/lib/auth-utils";
 import type { NextRequest } from "next/server";
 import { DOMAINS } from "@/lib/constants";
 
@@ -12,12 +12,8 @@ function daysFromNow(n: number, h = 9, m = 0) {
   return d;
 }
 
-// POST /api/seed — seeds demo data for testing (dev only)
-export async function POST(req: NextRequest) {
-  if (process.env.NODE_ENV === "production") {
-    return bad("Seeding is disabled in production", 403);
-  }
-
+// POST /api/seed — seeds demo data for testing and hosted demos
+export async function POST(_req: NextRequest) {
   // Check if data already exists
   const existingDomains = await db.domain.count();
   if (existingDomains > 0) {
