@@ -5,6 +5,7 @@ import { useLifeOS } from "@/store/life-os";
 import { useQuickCapture, useCreateItem, useDomains, useProjects } from "@/lib/hooks";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -81,7 +82,7 @@ export function QuickCapture() {
 
   return (
     <Dialog open={quickCaptureOpen} onOpenChange={setQuickCaptureOpen}>
-      <DialogContent className="gap-0 p-0 sm:max-w-[560px]">
+      <DialogContent className="gap-0 p-0 sm:max-w-[560px]" showCloseButton={false}>
         <DialogHeader className="sr-only">
           <DialogTitle>Quick Capture</DialogTitle>
           <DialogDescription>Capture a thought instantly.</DialogDescription>
@@ -90,7 +91,13 @@ export function QuickCapture() {
         <div className="flex items-center gap-2 border-b border-border/60 px-4 py-3">
           <Icon name="Zap" className="h-4 w-4 text-amber-500" />
           <span className="text-sm font-medium">Quick Capture</span>
-          <kbd className="ml-auto rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">⌘K</kbd>
+          <div className="ml-auto flex items-center gap-2">
+            <kbd className="rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">⌘K</kbd>
+            <DialogClose className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+              <Icon name="X" className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </DialogClose>
+          </div>
         </div>
 
         <textarea
