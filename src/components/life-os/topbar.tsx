@@ -10,8 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { ITEM_TYPE_MAP, DOMAIN_MAP } from "@/lib/constants";
 import {
   Popover,
+  PopoverAnchor,
   PopoverContent,
-  PopoverTrigger,
 } from "@/components/ui/popover";
 import { useTheme } from "next-themes";
 
@@ -24,16 +24,22 @@ export function Topbar() {
 
   const results = data && q ? data : { items: [], projects: [], tags: [] };
 
+  function updateSearch(value: string) {
+    setQ(value);
+    setOpen(value.length > 0);
+  }
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border/60 bg-background/80 px-4 backdrop-blur-md">
       {/* Search */}
       <Popover open={open && q.length > 0} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+        <PopoverAnchor asChild>
           <div className="relative w-full max-w-md">
             <Icon name="Search" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               value={q}
-              onChange={(e) => { setQ(e.target.value); setOpen(true); }}
+              onChange={(e) => updateSearch(e.target.value)}
+              onFocus={() => setOpen(q.length > 0)}
               placeholder="Search your brain…"
               className="h-9 bg-muted/50 pl-9 pr-16"
             />
@@ -41,8 +47,13 @@ export function Topbar() {
               /
             </kbd>
           </div>
-        </PopoverTrigger>
-        <PopoverContent className="w-[420px] p-0" align="start">
+        </PopoverAnchor>
+        <PopoverContent
+          className="w-[420px] p-0"
+          align="start"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onCloseAutoFocus={(e) => e.preventDefault()}
+        >
           <div className="max-h-[420px] overflow-y-auto p-2">
             {results.items.length === 0 && results.projects.length === 0 && results.tags.length === 0 ? (
               <div className="py-8 text-center text-sm text-muted-foreground">No results for “{q}”</div>
