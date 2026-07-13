@@ -155,10 +155,10 @@ export function SettingsView() {
     else toast.error(data.error || "Seeding failed");
   }
 
-  if (loading) return <div className="mx-auto max-w-2xl"><div className="h-8 w-48 animate-pulse rounded bg-muted/40" /></div>;
+  if (loading) return <div className="space-y-4"><div className="h-8 w-48 animate-pulse rounded bg-muted/40" /></div>;
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="space-y-6">
       <PageHeader title="Settings" subtitle="Manage your account, security, AI, and preferences." icon="Settings" color="#71717a" />
 
       {/* Profile */}

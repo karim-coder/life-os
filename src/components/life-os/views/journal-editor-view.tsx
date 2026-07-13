@@ -119,7 +119,7 @@ export function JournalEditorView() {
 
   if (journalEditId && isLoading) {
     return (
-      <div className="mx-auto max-w-3xl space-y-4">
+      <div className="space-y-4">
         <div className="h-10 w-48 animate-pulse rounded-lg bg-muted/40" />
         <div className="h-12 w-full animate-pulse rounded-lg bg-muted/30" />
         <div className="h-64 w-full animate-pulse rounded-xl bg-muted/20" />
@@ -128,7 +128,7 @@ export function JournalEditorView() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div>
       {/* Sticky top bar */}
       <div className="sticky top-0 z-20 -mx-4 mb-4 flex items-center justify-between border-b border-border/40 bg-background/80 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6">
         <button
