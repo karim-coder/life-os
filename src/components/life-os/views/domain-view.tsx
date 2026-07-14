@@ -147,6 +147,22 @@ export function DomainView({ domainKey }: { domainKey: string }) {
         </div>
       )}
 
+      {/* Hero domain card skeleton */}
+      {isLoading && (
+        <div className="space-y-6">
+          <div className="relative overflow-hidden rounded-3xl border border-border/60 p-6">
+            <div className="grid gap-4 sm:grid-cols-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <div className="h-7 w-12 animate-pulse rounded bg-muted/40" />
+                  <div className="h-3 w-16 animate-pulse rounded bg-muted/30" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Items */}
       {isLoading ? (
         <div className="grid gap-3 sm:grid-cols-2">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-20 animate-pulse rounded-xl bg-muted/40" />)}</div>
