@@ -18,9 +18,9 @@ import { motion } from "framer-motion";
 export function DashboardView() {
   const { setView, openItemDetail, openProject, openItemEditor, setQuickCaptureOpen } = useLifeOS();
   const { data: stats, isLoading } = useStats();
-  const { data: todayData } = useItems({ type: "task", status: "active" });
-  const { data: projData } = useProjects();
-  const { data: reviewData } = useReviews();
+  const { data: todayData, isLoading: tasksLoading } = useItems({ type: "task", status: "active" });
+  const { data: projData, isLoading: projectsLoading } = useProjects();
+  const { data: reviewData, isLoading: reviewsLoading } = useReviews();
 
   const today = new Date();
   const greeting = today.getHours() < 12 ? "Good morning" : today.getHours() < 18 ? "Good afternoon" : "Good evening";
@@ -40,6 +40,100 @@ export function DashboardView() {
   const projects = (projData?.projects || []).filter((p) => p.status === "active").slice(0, 4);
   const lastReview = reviewData?.reviews?.[0];
   const reviewAge = lastReview ? Math.floor((today.getTime() - new Date(lastReview.date).getTime()) / 86400000) : 999;
+
+  if (isLoading || tasksLoading) {
+    return (
+      <div className="space-y-6">
+        {/* Hero skeleton */}
+        <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-transparent p-6">
+          <div className="space-y-3">
+            <div className="h-4 w-32 animate-pulse rounded bg-muted/40" />
+            <div className="h-8 w-72 animate-pulse rounded bg-muted/40" />
+            <div className="h-4 w-48 animate-pulse rounded bg-muted/30" />
+          </div>
+        </div>
+
+        {/* Stat pills skeleton */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="rounded-2xl border border-border/60 bg-card/60 p-4">
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 animate-pulse rounded bg-muted/40" />
+                <div className="h-3 w-16 animate-pulse rounded bg-muted/30" />
+              </div>
+              <div className="mt-2 h-7 w-12 animate-pulse rounded bg-muted/40" />
+            </div>
+          ))}
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-3">
+          {/* Main column skeleton */}
+          <div className="space-y-6 lg:col-span-2">
+            {/* Today's focus skeleton */}
+            <div className="rounded-2xl border border-border/60 bg-card/40 p-5">
+              <div className="mb-4 flex items-center justify-between">
+                <div className="h-5 w-24 animate-pulse rounded bg-muted/40" />
+                <div className="h-8 w-20 animate-pulse rounded bg-muted/30" />
+              </div>
+              <div className="space-y-2">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-3 rounded-xl border border-border/40 p-3">
+                    <div className="h-5 w-5 animate-pulse rounded-md bg-muted/40" />
+                    <div className="flex-1 space-y-1.5">
+                      <div className="h-4 w-2/3 animate-pulse rounded bg-muted/40" />
+                      <div className="h-3 w-1/3 animate-pulse rounded bg-muted/30" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Active threads skeleton */}
+            <div className="rounded-2xl border border-border/60 bg-card/40 p-5">
+              <div className="mb-4 flex items-center justify-between">
+                <div className="h-5 w-28 animate-pulse rounded bg-muted/40" />
+                <div className="h-8 w-16 animate-pulse rounded bg-muted/30" />
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="rounded-xl border border-border/40 p-4">
+                    <div className="flex items-center gap-2">
+                      <div className="h-3 w-3 animate-pulse rounded-full bg-muted/40" />
+                      <div className="h-4 w-2/3 animate-pulse rounded bg-muted/40" />
+                    </div>
+                    <div className="mt-2 h-3 w-full animate-pulse rounded bg-muted/30" />
+                    <div className="mt-3">
+                      <div className="mb-1 flex justify-between">
+                        <div className="h-2.5 w-12 animate-pulse rounded bg-muted/30" />
+                        <div className="h-2.5 w-8 animate-pulse rounded bg-muted/30" />
+                      </div>
+                      <div className="h-1.5 w-full animate-pulse rounded-full bg-muted/30" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right sidebar skeleton */}
+          <div className="space-y-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="rounded-2xl border border-border/60 bg-card/40 p-5">
+                <div className="mb-3 flex items-center gap-2">
+                  <div className="h-4 w-4 animate-pulse rounded bg-muted/40" />
+                  <div className="h-4 w-20 animate-pulse rounded bg-muted/40" />
+                </div>
+                <div className="space-y-2">
+                  <div className="h-3 w-full animate-pulse rounded bg-muted/30" />
+                  <div className="h-3 w-3/4 animate-pulse rounded bg-muted/30" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
