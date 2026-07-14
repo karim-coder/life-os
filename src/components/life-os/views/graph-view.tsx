@@ -251,8 +251,20 @@ export function GraphView() {
         <SectionCard className="relative overflow-hidden p-0" bodyClassName="p-0">
           <div ref={containerRef} className="relative h-[560px] w-full">
             {isLoading ? (
-              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-                <Icon name="Loader2" className="mr-2 h-4 w-4 animate-spin" /> Weaving your brain…
+              <div className="flex h-full items-center justify-center">
+                <div className="relative h-64 w-64">
+                  {/* Placeholder nodes skeleton mimicking the graph layout */}
+                  <div className="absolute left-1/2 top-1/4 h-10 w-10 -translate-x-1/2 animate-pulse rounded-full bg-muted/40" />
+                  <div className="absolute left-1/4 top-1/3 h-8 w-8 animate-pulse rounded-full bg-muted/30" />
+                  <div className="absolute left-2/3 top-1/3 h-8 w-8 animate-pulse rounded-full bg-muted/30" />
+                  <div className="absolute left-1/3 top-1/2 h-9 w-9 animate-pulse rounded-full bg-muted/40" />
+                  <div className="absolute left-3/5 top-1/2 h-7 w-7 animate-pulse rounded-full bg-muted/30" />
+                  <div className="absolute left-1/2 top-2/3 h-8 w-8 -translate-x-1/2 animate-pulse rounded-full bg-muted/30" />
+                  <div className="absolute left-1/4 top-2/3 h-7 w-7 animate-pulse rounded-full bg-muted/30" />
+                  <div className="absolute left-3/4 top-2/3 h-9 w-9 animate-pulse rounded-full bg-muted/40" />
+                  <div className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 animate-pulse rounded-full bg-muted/20" />
+                  <p className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm text-muted-foreground">Weaving your brain…</p>
+                </div>
               </div>
             ) : allNodes.length === 0 ? (
               <EmptyState icon="Network" title="No connections yet" description="Link items to each other from the detail panel to see your digital brain bloom." />

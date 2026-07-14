@@ -46,8 +46,8 @@ function playChime() {
 
 export function FocusView() {
   const { openItemEditor } = useLifeOS();
-  const { data: tasksData } = useItems({ type: "task", status: "active" });
-  const { data: habitsData } = useItems({ type: "habit", status: "active" });
+  const { data: tasksData, isLoading: tasksLoading } = useItems({ type: "task", status: "active" });
+  const { data: habitsData, isLoading: habitsLoading } = useItems({ type: "habit", status: "active" });
   const update = useUpdateItem();
   const toggleHabit = useToggleHabit();
 
@@ -194,6 +194,66 @@ export function FocusView() {
   const R = 130;
   const C = 2 * Math.PI * R;
   const dash = C * (progress / 100);
+
+  if (tasksLoading || habitsLoading) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Focus & Deep Work"
+          subtitle="Protect your attention. Run a pomodoro, connect it to a habit, and watch your practice grow."
+          icon="Brain"
+          color="#f59e0b"
+        />
+
+        <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+          {/* Timer skeleton */}
+          <div className="rounded-2xl border border-border/60 bg-card/40 p-5">
+            {/* Mode tabs skeleton */}
+            <div className="mb-6 flex justify-center gap-1 rounded-xl bg-muted p-1">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-8 w-20 animate-pulse rounded-lg bg-muted/60" />
+              ))}
+            </div>
+            {/* Circular timer skeleton */}
+            <div className="mx-auto flex h-[320px] w-[320px] items-center justify-center">
+              <div className="h-40 w-40 animate-pulse rounded-full bg-muted/30" />
+            </div>
+            {/* Controls skeleton */}
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <div className="h-12 w-32 animate-pulse rounded-lg bg-muted/40" />
+              <div className="h-12 w-12 animate-pulse rounded-lg bg-muted/30" />
+            </div>
+          </div>
+
+          {/* Right column skeleton */}
+          <div className="space-y-6">
+            {/* Today stats skeleton */}
+            <div className="rounded-2xl border border-border/60 bg-card/40 p-5">
+              <div className="mb-3 h-5 w-16 animate-pulse rounded bg-muted/40" />
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-xl bg-amber-500/10 p-4 text-center">
+                  <div className="mx-auto h-8 w-8 animate-pulse rounded bg-muted/40" />
+                  <div className="mx-auto mt-2 h-3 w-14 animate-pulse rounded bg-muted/30" />
+                </div>
+                <div className="rounded-xl bg-emerald-500/10 p-4 text-center">
+                  <div className="mx-auto h-8 w-8 animate-pulse rounded bg-muted/40" />
+                  <div className="mx-auto mt-2 h-3 w-14 animate-pulse rounded bg-muted/30" />
+                </div>
+              </div>
+            </div>
+            {/* Focus on skeleton */}
+            <div className="rounded-2xl border border-border/60 bg-card/40 p-5">
+              <div className="mb-3 h-5 w-20 animate-pulse rounded bg-muted/40" />
+              <div className="space-y-3">
+                <div className="h-9 w-full animate-pulse rounded-lg bg-muted/30" />
+                <div className="h-9 w-full animate-pulse rounded-lg bg-muted/30" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
