@@ -1,6 +1,7 @@
 "use client";
 
 import { useInsights, downloadCSV, useRunScheduler } from "@/lib/hooks";
+import { notify } from "@/lib/toast";
 import { useLifeOS } from "@/store/life-os";
 import { Icon } from "../icon";
 import { PageHeader, SectionCard, EmptyState } from "../layout";
@@ -55,7 +56,7 @@ export function InsightsView() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => runScheduler.mutate()}
+              onClick={() => { runScheduler.mutate(); notify.info("Running scheduler…"); }}
               disabled={runScheduler.isPending}
               className="gap-1.5"
               title="Advance recurring items and reset stale habit streaks"

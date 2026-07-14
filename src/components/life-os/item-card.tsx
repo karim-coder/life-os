@@ -5,6 +5,7 @@ import { Icon } from "./icon";
 import { ITEM_TYPE_MAP, DOMAIN_MAP, PRIORITY_META } from "@/lib/constants";
 import { smartDate, dateColor } from "@/lib/dates";
 import { useUpdateItem } from "@/lib/hooks";
+import { notify } from "@/lib/toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
@@ -26,7 +27,7 @@ export function ItemCard({ item, onClick, compact, showProject, className }: Ite
 
   function toggleDone(e: React.MouseEvent) {
     e.stopPropagation();
-    update.mutate({ id: item.id, status: done ? "active" : "done" });
+    update.mutate({ id: item.id, status: done ? "active" : "done" }); notify.success(done ? "Reopened" : "Completed");
   }
 
   return (

@@ -18,7 +18,7 @@ import { useLifeOS } from "@/store/life-os";
 import { useCreateItem, useUpdateItem, useProjects, useDomains, useTags } from "@/lib/hooks";
 import { ITEM_TYPES, DOMAINS, PRIORITY_META, ITEM_TYPE_MAP } from "@/lib/constants";
 import { Icon } from "./icon";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import { toDateInput, fromDateInput } from "@/lib/dates";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -76,7 +76,7 @@ export function ItemEditor() {
 
   async function save() {
     if (!form.title?.trim()) {
-      toast.error("Title is required");
+      notify.error("Title is required");
       return;
     }
     const payload: any = {
@@ -118,14 +118,14 @@ export function ItemEditor() {
     try {
       if (form.id) {
         await update.mutateAsync({ id: form.id, ...payload });
-        toast.success("Updated");
+        notify.success("Updated");
       } else {
         await create.mutateAsync(payload);
-        toast.success("Created");
+        notify.success("Created");
       }
       closeItemEditor();
     } catch (e: any) {
-      toast.error(e.message || "Failed to save");
+      notify.error(e.message || "Failed to save");
     }
   }
 

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Icon } from "./icon";
 import { ITEM_TYPES, ITEM_TYPE_MAP } from "@/lib/constants";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 
 const QUICK_TYPES = ["note", "task", "idea", "journal", "bookmark", "contact"] as const;
@@ -74,9 +74,9 @@ export function QuickCapture() {
         await create.mutateAsync({ title, type, status: "active", domainId: domainId || null, projectId: projectId || null });
       }
       setText("");
-      toast.success(captureMode ? "Captured to inbox" : "Created");
+      notify.success(captureMode ? "Captured to inbox" : "Created");
     } catch (e: any) {
-      toast.error(e.message || "Failed");
+      notify.error(e.message || "Failed");
     }
   }
 

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion } from "framer-motion";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { fmtDate } from "@/lib/dates";
 import ReactMarkdown from "react-markdown";
@@ -84,7 +84,7 @@ export function JournalEditorView() {
 
   async function save() {
     if (!title.trim()) {
-      toast.error("Add a title first");
+      notify.error("Add a title first");
       return;
     }
     try {
@@ -96,7 +96,7 @@ export function JournalEditorView() {
           domainId: domainId || null,
           projectId: projectId || null,
         });
-        toast.success("Entry saved");
+        notify.success("Entry saved");
       } else {
         await create.mutateAsync({
           type: "journal",
@@ -108,12 +108,12 @@ export function JournalEditorView() {
           scheduledAt: new Date().toISOString(),
         });
         localStorage.removeItem("lifeos-journal-draft");
-        toast.success("Journal entry created");
+        notify.success("Journal entry created");
       }
       setSaved(true);
       setTimeout(() => setView("mind_soul"), 600);
     } catch (e: any) {
-      toast.error(e.message || "Failed to save");
+      notify.error(e.message || "Failed to save");
     }
   }
 

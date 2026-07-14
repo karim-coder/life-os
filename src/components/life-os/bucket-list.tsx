@@ -5,7 +5,7 @@ import { useLifeOS } from "@/store/life-os";
 import { Icon } from "./icon";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 
 export function BucketList() {
   const { data } = useItems({ type: "goal,milestone", status: "active,done" });
@@ -71,7 +71,7 @@ export function BucketList() {
                 onClick={(e) => {
                   e.stopPropagation();
                   update.mutate({ id: item.id, status: "done" });
-                  toast.success("Achieved!");
+                  notify.success("Achieved!");
                 }}
                 className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md border-2 border-purple-400/50 transition-all hover:border-purple-500 hover:bg-purple-500/10"
                 title="Mark as done"
