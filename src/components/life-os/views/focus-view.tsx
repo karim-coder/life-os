@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import { motion } from "framer-motion";
 
 type Mode = "focus" | "short" | "long" | "custom";
@@ -140,15 +140,15 @@ export function FocusView() {
               const todayKey = new Date().toISOString().slice(0, 10);
               toggleHabit.mutate({ id: selectedItemId, date: todayKey });
               const habitName = habits.find((h) => h.id === selectedItemId)?.title;
-              toast.success(`Focus complete! ${elapsedMins} min`, {
+              notify.success(`Focus complete! ${elapsedMins} min`, {
                 description: `✓ ${habitName} logged for today. Take a break!`,
               });
             } else if (selectedItemType === "task" && selectedItemId) {
-              toast.success(`Focus complete! ${elapsedMins} min`, {
+              notify.success(`Focus complete! ${elapsedMins} min`, {
                 description: "Great work. Take a short break.",
               });
             } else {
-              toast.success(`Focus complete! ${elapsedMins} min`, {
+              notify.success(`Focus complete! ${elapsedMins} min`, {
                 description: "Take a short break.",
               });
             }
@@ -156,7 +156,7 @@ export function FocusView() {
             // auto-suggest break
             setTimeout(() => switchMode(newSessions % 4 === 0 ? "long" : "short"), 800);
           } else {
-            toast.success("Break over — back to focus!", { description: "You've got this." });
+            notify.success("Break over — back to focus!", { description: "You've got this." });
             setTimeout(() => switchMode("focus"), 800);
           }
           return 0;

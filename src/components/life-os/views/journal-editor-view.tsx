@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLifeOS } from "@/store/life-os";
 import { useItem, useCreateItem, useUpdateItem, useDeleteItem, useItems, useDomains } from "@/lib/hooks";
 import { Icon } from "../icon";
@@ -18,14 +18,44 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { fmtDate } from "@/lib/dates";
 import ReactMarkdown from "react-markdown";
 import { RichTextEditor } from "../rich-text-editor";
 
 const ACCENT = "#a78bfa";
+const DEFAULT_DAILY_GOAL = 500;
+const GOAL_STORAGE_KEY = "lifeos-daily-writing-goal";
+
+function getWritingGoal(): number {
+  if (typeof window === "undefined") return DEFAULT_DAILY_GOAL;
+  try {
+    const stored = localStorage.getItem(GOAL_STORAGE_KEY);
+    return stored ? parseInt(stored, 10) || DEFAULT_DAILY_GOAL : DEFAULT_DAILY_GOAL;
+  } catch {
+    return DEFAULT_DAILY_GOAL;
+  }
+}
+
+/** Compute rich text statistics from markdown content */
+function computeStats(content: string) {
+  const text = content.trim();
+  if (!text) {
+    return { words: 0, chars: 0, charsNoSpaces: 0, sentences: 0, paragraphs: 0, readTime: 1 };
+  }
+  const words = text.split(/\s+/).filter(Boolean).length;
+  const chars = text.length;
+  const charsNoSpaces = text.replace(/\s/g, "").length;
+  // Count sentences by period, exclamation, question mark followed by space or end
+  const sentences = (text.match(/[.!?]+(\s|$)/g) || []).length || (words > 0 ? 1 : 0);
+  // Count paragraphs by double newline or single newline with content
+  const paragraphs = text.split(/\n\s*\n/).filter((p) => p.trim().length > 0).length || 1;
+  const readTime = Math.max(1, Math.ceil(words / 200));
+  return { words, chars, charsNoSpaces, sentences, paragraphs, readTime };
+}
 
 export function JournalEditorView() {
   const { journalEditId, setView, openItemDetail } = useLifeOS();
@@ -43,9 +73,28 @@ export function JournalEditorView() {
   const [showPreview, setShowPreview] = useState(false);
   const [saved, setSaved] = useState(false);
   const [lastKey, setLastKey] = useState("");
+  const [dailyGoal, setDailyGoal] = useState(DEFAULT_DAILY_GOAL);
+  const [showGoalInput, setShowGoalInput] = useState(false);
+  const [goalInput, setGoalInput] = useState(String(DEFAULT_DAILY_GOAL));
 
   const domains = domData?.domains || [];
   const mindSoulDomain = domains.find((d: any) => d.key === "mind_soul");
+
+  // Load writing goal from localStorage
+  useEffect(() => {
+    setDailyGoal(getWritingGoal());
+    setGoalInput(String(getWritingGoal()));
+  }, []);
+
+  const handleGoalSave = useCallback(() => {
+    const val = parseInt(goalInput, 10);
+    if (val > 0) {
+      setDailyGoal(val);
+      localStorage.setItem(GOAL_STORAGE_KEY, String(val));
+      toast.success(`Daily goal set to ${val} words`);
+    }
+    setShowGoalInput(false);
+  }, [goalInput]);
 
   // Load existing item or initialize new
   const loadKey = journalEditId || "new";
@@ -91,12 +140,13 @@ export function JournalEditorView() {
     }
   }
 
-  const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
-  const readTime = Math.max(1, Math.ceil(wordCount / 200));
+  const stats = computeStats(content);
+  const goalProgress = Math.min(100, Math.round((stats.words / dailyGoal) * 100));
+  const goalReached = stats.words >= dailyGoal;
 
   async function save() {
     if (!title.trim()) {
-      toast.error("Add a title first");
+      notify.error("Add a title first");
       return;
     }
     try {
@@ -108,7 +158,7 @@ export function JournalEditorView() {
           domainId: domainId || null,
           projectId: projectId || null,
         });
-        toast.success("Entry saved");
+        notify.success("Entry saved");
       } else {
         await create.mutateAsync({
           type: "journal",
@@ -120,12 +170,12 @@ export function JournalEditorView() {
           scheduledAt: new Date().toISOString(),
         });
         localStorage.removeItem("lifeos-journal-draft");
-        toast.success("Journal entry created");
+        notify.success("Journal entry created");
       }
       setSaved(true);
       setTimeout(() => setView("mind_soul"), 600);
     } catch (e: any) {
-      toast.error(e.message || "Failed to save");
+      notify.error(e.message || "Failed to save");
     }
   }
 
@@ -280,26 +330,92 @@ export function JournalEditorView() {
           )}
         </div>
 
-        {/* Footer: metadata + stats */}
-        <div className="flex flex-wrap items-center gap-3 border-t border-border/40 bg-muted/20 px-5 py-3">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Domain</span>
-            <Select value={domainId || "none"} onValueChange={(v) => setDomainId(v === "none" ? "" : v)}>
-              <SelectTrigger className="h-7 w-36 text-xs"><SelectValue placeholder="None" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                {domains.map((d: any) => (
-                  <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+        {/* Live word count + writing goal bar */}
+        <div className="border-t border-border/40 bg-muted/20 px-5 py-3">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Domain</span>
+              <Select value={domainId || "none"} onValueChange={(v) => setDomainId(v === "none" ? "" : v)}>
+                <SelectTrigger className="h-7 w-36 text-xs"><SelectValue placeholder="None" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">None</SelectItem>
+                  {domains.map((d: any) => (
+                    <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Live word count with goal progress */}
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                {showGoalInput ? (
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      value={goalInput}
+                      onChange={(e) => setGoalInput(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleGoalSave()}
+                      className="h-6 w-16 rounded border border-border bg-background px-2 text-[10px] outline-none"
+                      min={1}
+                      autoFocus
+                    />
+                    <span className="text-[10px] text-muted-foreground">words</span>
+                    <button onClick={handleGoalSave} className="text-[10px] text-violet-500 hover:underline">Set</button>
+                    <button onClick={() => setShowGoalInput(false)} className="text-[10px] text-muted-foreground hover:underline">Cancel</button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowGoalInput(true)}
+                    className="group flex items-center gap-1.5 text-[10px] text-muted-foreground transition-colors hover:text-foreground"
+                    title="Click to change daily writing goal"
+                  >
+                    <Icon name="Target" className="h-3 w-3" />
+                    <span>{dailyGoal} word goal</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Goal progress bar */}
+              <div className="flex items-center gap-2">
+                <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
+                  <motion.div
+                    className={cn("h-full rounded-full", goalReached ? "bg-emerald-500" : "bg-violet-500")}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${goalProgress}%` }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                  />
+                </div>
+                <span className={cn(
+                  "text-[10px] font-medium",
+                  goalReached ? "text-emerald-500" : "text-muted-foreground",
+                )}>
+                  {stats.words}/{dailyGoal}
+                </span>
+                {goalReached && (
+                  <Icon name="CheckCircle2" className="h-3 w-3 text-emerald-500" />
+                )}
+              </div>
+            </div>
           </div>
-          <div className="ml-auto flex items-center gap-3 text-[10px] text-muted-foreground">
-            <span>{wordCount} words</span>
+
+          {/* Detailed stats row */}
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground">
+            <span className="inline-flex items-center gap-1">
+              <Icon name="Type" className="h-2.5 w-2.5" />
+              {stats.words} words
+            </span>
             <span>·</span>
-            <span>{readTime} min read</span>
+            <span>{stats.chars} chars</span>
             <span>·</span>
-            <span>{content.length} chars</span>
+            <span>{stats.sentences} sentences</span>
+            <span>·</span>
+            <span>{stats.paragraphs} paragraphs</span>
+            <span>·</span>
+            <span className="inline-flex items-center gap-1">
+              <Icon name="Clock" className="h-2.5 w-2.5" />
+              {stats.readTime} min read
+            </span>
           </div>
         </div>
       </motion.div>

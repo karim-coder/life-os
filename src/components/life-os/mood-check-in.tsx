@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useCreateReview, useReviews } from "@/lib/hooks";
 import { Icon } from "./icon";
 import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { fmtDate } from "@/lib/dates";
 
@@ -78,7 +78,7 @@ export function MoodCheckIn() {
 
   async function save() {
     if (mood == null && energy == null) {
-      toast.error("Pick a mood or energy level first");
+      notify.error("Pick a mood or energy level first");
       return;
     }
     await create.mutateAsync({
@@ -91,7 +91,7 @@ export function MoodCheckIn() {
       notes: "Quick check-in from dashboard",
     });
     setSaved(true);
-    toast.success("Check-in saved");
+    notify.success("Check-in saved");
   }
 
   return (

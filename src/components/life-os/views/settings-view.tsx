@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import QRCode from "qrcode";
 import { requestNotificationPermission, sendNotification } from "../notifications";
 import {
@@ -67,7 +67,7 @@ export function SettingsView() {
     });
     const data = await res.json();
     setPrefs(data);
-    toast.success("Settings saved");
+    notify.success("Settings saved");
   }
 
   async function toggle2FA(enabled: boolean) {
@@ -77,15 +77,15 @@ export function SettingsView() {
       try {
         const res = await fetch("/api/auth/setup-2fa", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) });
         const data = await res.json();
-        if (!res.ok) { toast.error(data.error); return; }
+        if (!res.ok) { notify.error(data.error); return; }
         const qr = await QRCode.toDataURL(data.otpauthUrl, { width: 200, margin: 1, color: { dark: "#0f172a", light: "#ffffff" } });
         setQr2faUrl(qr);
         setManualEntry(data.manualEntry);
-      } catch { toast.error("Failed to set up 2FA"); }
+      } catch { notify.error("Failed to set up 2FA"); }
       finally { setLoading(false); }
     } else {
       const res = await fetch("/api/auth/disable-2fa", { method: "POST" });
-      if (res.ok) { setTwoFAEnabled(false); toast.success("2FA disabled"); }
+      if (res.ok) { setTwoFAEnabled(false); notify.success("2FA disabled"); }
     }
   }
 
@@ -94,10 +94,10 @@ export function SettingsView() {
     try {
       const res = await fetch("/api/auth/setup-2fa", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "confirm", token: verifyCode }) });
       const data = await res.json();
-      if (!res.ok) { toast.error(data.error); return; }
+      if (!res.ok) { notify.error(data.error); return; }
       setTwoFAEnabled(true); setShow2FASetup(false); setVerifyCode("");
-      toast.success("2FA enabled");
-    } catch { toast.error("Failed to verify"); }
+      notify.success("2FA enabled");
+    } catch { notify.error("Failed to verify"); }
     finally { setLoading(false); }
   }
 
@@ -105,7 +105,7 @@ export function SettingsView() {
     setTheme(t); localStorage.setItem("theme", t);
     if (t === "dark") document.documentElement.classList.add("dark");
     else document.documentElement.classList.remove("dark");
-    toast.success(`Theme: ${t}`);
+    notify.success(`Theme: ${t}`);
   }
 
   async function startQrLogin() {
@@ -117,13 +117,13 @@ export function SettingsView() {
         body: JSON.stringify({ email, password: "" }), // password not needed — already authenticated
       });
       const data = await res.json();
-      if (!res.ok) { toast.error(data.error || "Failed"); return; }
+      if (!res.ok) { notify.error(data.error || "Failed"); return; }
       const qr = await QRCode.toDataURL(data.qrUrl, { width: 280, margin: 1, color: { dark: "#0f172a", light: "#ffffff" } });
       setQrLoginUrl(qr);
       setQrLoginToken(data.token);
       setQrDialogOpen(true);
       pollQrStatus(data.token);
-    } catch { toast.error("Failed to generate QR"); }
+    } catch { notify.error("Failed to generate QR"); }
     finally { setQrLoading(false); }
   }
 
@@ -134,11 +134,11 @@ export function SettingsView() {
         const data = await res.json();
         if (data.confirmed) {
           setQrDialogOpen(false);
-          toast.success("Login confirmed on another device!");
+          notify.success("Login confirmed on another device!");
           return;
         }
         if (data.expired) {
-          toast.error("QR expired");
+          notify.error("QR expired");
           setQrDialogOpen(false);
           return;
         }
@@ -151,8 +151,8 @@ export function SettingsView() {
   async function seedData() {
     const res = await fetch("/api/seed", { method: "POST" });
     const data = await res.json();
-    if (res.ok) { toast.success("Seed data created!"); setTimeout(() => window.location.reload(), 1500); }
-    else toast.error(data.error || "Seeding failed");
+    if (res.ok) { notify.success("Seed data created!"); setTimeout(() => window.location.reload(), 1500); }
+    else notify.error(data.error || "Seeding failed");
   }
 
   if (loading) return (
@@ -217,7 +217,7 @@ export function SettingsView() {
           </div>
           <Button size="sm" onClick={async () => {
             const res = await fetch("/api/auth/profile", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
-            if (res.ok) toast.success("Profile updated");
+            if (res.ok) notify.success("Profile updated");
           }} className="gap-1.5"><Icon name="Save" className="h-3.5 w-3.5" /> Save profile</Button>
         </div>
       </SectionCard>
@@ -337,7 +337,7 @@ export function SettingsView() {
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600"><Icon name="Bell" className="h-4 w-4" /></span>
               <div><p className="text-sm font-medium">Browser notifications</p><p className="text-[11px] text-muted-foreground">Overdue & due task alerts</p></div>
             </div>
-            <Button size="sm" variant="outline" onClick={async () => { const g = await requestNotificationPermission(); if (g) { toast.success("Notifications enabled"); sendNotification("Life OS", "Enabled!"); } else toast.error("Permission denied"); }}>Enable</Button>
+            <Button size="sm" variant="outline" onClick={async () => { const g = await requestNotificationPermission(); if (g) { notify.success("Notifications enabled"); sendNotification("Life OS", "Enabled!"); } else notify.error("Permission denied"); }}>Enable</Button>
           </div>
         </div>
       </SectionCard>
@@ -386,8 +386,8 @@ export function SettingsView() {
                 <AlertDialogAction onClick={async () => {
                   const res = await fetch("/api/reset-db", { method: "POST" });
                   const data = await res.json();
-                  if (res.ok) { toast.success("Database reset. Reloading…"); setTimeout(() => window.location.reload(), 1500); }
-                  else toast.error(data.error || "Reset failed");
+                  if (res.ok) { notify.success("Database reset. Reloading…"); setTimeout(() => window.location.reload(), 1500); }
+                  else notify.error(data.error || "Reset failed");
                 }} className="bg-rose-500 hover:bg-rose-600">Reset everything</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -403,7 +403,7 @@ export function SettingsView() {
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
             const url = URL.createObjectURL(blob); const a = document.createElement("a");
             a.href = url; a.download = `lifeos-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click();
-            URL.revokeObjectURL(url); toast.success("Backup downloaded");
+            URL.revokeObjectURL(url); notify.success("Backup downloaded");
           }}><Icon name="Download" className="h-3.5 w-3.5" /> Full backup (JSON)</Button>
           <Button variant="outline" size="sm" className="gap-1.5" onClick={() => {
             const input = document.createElement("input"); input.type = "file"; input.accept = ".json";
@@ -413,9 +413,9 @@ export function SettingsView() {
               try {
                 const data = JSON.parse(text);
                 const res = await fetch("/api/backup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-                if (res.ok) { toast.success("Backup restored"); setTimeout(() => window.location.reload(), 1000); }
-                else toast.error("Restore failed");
-              } catch { toast.error("Invalid file"); }
+                if (res.ok) { notify.success("Backup restored"); setTimeout(() => window.location.reload(), 1000); }
+                else notify.error("Restore failed");
+              } catch { notify.error("Invalid file"); }
             };
             input.click();
           }}><Icon name="Upload" className="h-3.5 w-3.5" /> Restore backup</Button>

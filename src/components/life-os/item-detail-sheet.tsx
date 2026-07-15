@@ -16,7 +16,7 @@ import { useItem, useUpdateItem, useDeleteItem, useCreateLink, useDeleteLink, us
 import { Icon } from "./icon";
 import { ITEM_TYPE_MAP, DOMAIN_MAP, PRIORITY_META, STATUS_META } from "@/lib/constants";
 import { fmtDate, smartDate, dateColor } from "@/lib/dates";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import ReactMarkdown from "react-markdown";
 import {
   AlertDialog,
@@ -55,13 +55,13 @@ export function ItemDetailSheet() {
   async function saveContent() {
     await update.mutateAsync({ id: item.id, content: contentDraft });
     setEditingContent(false);
-    toast.success("Notes saved");
+    notify.success("Notes saved");
   }
 
   async function addLink(toId: string) {
     await createLink.mutateAsync({ fromId: item.id, toId, type: "related" });
     setLinkSearch("");
-    toast.success("Connected");
+    notify.success("Connected");
   }
 
   async function removeLink(linkId: string, direction: "out" | "in") {
@@ -70,12 +70,13 @@ export function ItemDetailSheet() {
     } else {
       await deleteLink.mutateAsync({ fromId: linkId, toId: item.id });
     }
+    notify.success("Link removed");
   }
 
   async function handleDelete() {
     await del.mutateAsync(item.id);
     closeItemDetail();
-    toast.success("Deleted");
+    notify.success("Deleted");
   }
 
   return (
@@ -371,7 +372,7 @@ export function ItemDetailSheet() {
                   <Button
                     size="sm"
                     variant={isDone ? "outline" : "default"}
-                    onClick={() => update.mutate({ id: item.id, status: isDone ? "active" : "done" })}
+                    onClick={() => { update.mutate({ id: item.id, status: isDone ? "active" : "done" }); notify.success(isDone ? "Reopened" : "Completed"); }}
                     className="gap-1.5"
                   >
                     <Icon name={isDone ? "RotateCcw" : "Check"} className="h-3.5 w-3.5" />
@@ -752,6 +753,7 @@ function ReadingProgressUpdater({ item, currentPage, totalPages, accentColor }: 
     // also update bookmark status to finished if done
     if (isFinished) {
       update.mutate({ id: item.id, metadata: { ...newMeta, status: "finished" }, status: "done" });
+      notify.success("Finished reading!");
     }
     setPageInput(String(clamped));
   }

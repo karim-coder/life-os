@@ -13,10 +13,33 @@ import {
 } from "@/components/ui/dialog";
 import { Icon } from "./icon";
 import { ITEM_TYPES, ITEM_TYPE_MAP } from "@/lib/constants";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 
 const QUICK_TYPES = ["note", "task", "idea", "journal", "bookmark", "contact"] as const;
+
+/** Detect macOS for displaying correct modifier symbols */
+function useIsMac() {
+  const [isMac, setIsMac] = useState(false);
+  useEffect(() => {
+    setIsMac(navigator.platform?.toUpperCase().includes("MAC") ?? false);
+  }, []);
+  return isMac;
+}
+
+/** Reusable kbd badge component for shortcut hints */
+function Kbd({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <kbd
+      className={cn(
+        "inline-flex items-center justify-center rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium leading-none text-muted-foreground shadow-sm",
+        className,
+      )}
+    >
+      {children}
+    </kbd>
+  );
+}
 
 export function QuickCapture() {
   const { quickCaptureOpen, setQuickCaptureOpen, openItemEditor } = useLifeOS();
@@ -30,6 +53,9 @@ export function QuickCapture() {
   const [projectId, setProjectId] = useState<string>("");
   const [wasOpen, setWasOpen] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const isMac = useIsMac();
+
+  const mod = isMac ? "⌘" : "Ctrl+";
 
   // reset form when opening (render-time state adjustment)
   if (quickCaptureOpen !== wasOpen) {
@@ -74,9 +100,9 @@ export function QuickCapture() {
         await create.mutateAsync({ title, type, status: "active", domainId: domainId || null, projectId: projectId || null });
       }
       setText("");
-      toast.success(captureMode ? "Captured to inbox" : "Created");
+      notify.success(captureMode ? "Captured to inbox" : "Created");
     } catch (e: any) {
-      toast.error(e.message || "Failed");
+      notify.error(e.message || "Failed");
     }
   }
 
@@ -91,9 +117,11 @@ export function QuickCapture() {
         <div className="flex items-center gap-2 border-b border-border/60 px-4 py-3">
           <Icon name="Zap" className="h-4 w-4 shrink-0 text-amber-500" />
           <span className="text-sm font-medium">Quick Capture</span>
-          <div className="ml-auto flex shrink-0 items-center gap-3">
-            <kbd className="hidden rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground sm:inline-block">⌘K</kbd>
-            <DialogClose className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+          <div className="ml-auto flex shrink-0 items-center gap-2">
+            <span className="hidden items-center gap-1 text-[10px] text-muted-foreground sm:inline-flex">
+              <Kbd>{mod}K</Kbd> to open
+            </span>
+            <DialogClose className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
               <Icon name="X" className="h-4 w-4" />
               <span className="sr-only">Close</span>
             </DialogClose>
@@ -105,13 +133,21 @@ export function QuickCapture() {
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
+            if (e.key === "Enter" && !e.shiftKey && !(e.metaKey || e.ctrlKey)) {
               e.preventDefault();
               submit();
             }
             if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
               e.preventDefault();
               submit(false);
+            }
+            // Number keys 1-6 to switch type when not holding modifiers
+            if (!e.metaKey && !e.ctrlKey && !e.altKey) {
+              const num = parseInt(e.key);
+              if (num >= 1 && num <= QUICK_TYPES.length) {
+                e.preventDefault();
+                setType(QUICK_TYPES[num - 1]);
+              }
             }
           }}
           placeholder="What's on your mind? Press Enter to capture to inbox…"
@@ -120,9 +156,9 @@ export function QuickCapture() {
         />
 
         <div className="flex flex-wrap items-center gap-2 border-t border-border/60 px-4 py-3">
-          {/* type chips */}
+          {/* type chips with number shortcuts */}
           <div className="flex flex-wrap gap-1">
-            {QUICK_TYPES.map((t) => {
+            {QUICK_TYPES.map((t, idx) => {
               const m = ITEM_TYPE_MAP[t];
               return (
                 <button
@@ -136,6 +172,12 @@ export function QuickCapture() {
                 >
                   <Icon name={m.icon} className="h-3 w-3" />
                   {m.name}
+                  <span className={cn(
+                    "ml-0.5 inline-flex h-3.5 w-3.5 items-center justify-center rounded text-[8px] font-bold leading-none",
+                    type === t ? "text-white/60" : "text-muted-foreground/50"
+                  )}>
+                    {idx + 1}
+                  </span>
                 </button>
               );
             })}
@@ -172,9 +214,23 @@ export function QuickCapture() {
         </div>
 
         <div className="flex items-center justify-between gap-2 border-t border-border/60 bg-muted/30 px-4 py-3">
-          <span className="text-xs text-muted-foreground">
-            <kbd className="rounded border bg-background px-1">↵</kbd> capture · <kbd className="rounded border bg-background px-1">⌘↵</kbd> create active
-          </span>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+            <span className="inline-flex items-center gap-1">
+              <Kbd>↵</Kbd> capture
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Kbd>{mod}↵</Kbd> create active
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Kbd>⇧↵</Kbd> new line
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Kbd>Esc</Kbd> close
+            </span>
+            <span className="hidden items-center gap-1 sm:inline-flex">
+              <Kbd>1</Kbd>–<Kbd>{QUICK_TYPES.length}</Kbd> switch type
+            </span>
+          </div>
           <div className="flex gap-2">
             <button
               onClick={() => submit(false)}

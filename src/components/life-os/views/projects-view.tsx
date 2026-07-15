@@ -17,7 +17,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DOMAINS, ITEM_TYPE_MAP } from "@/lib/constants";
 import { fmtDate, smartDate } from "@/lib/dates";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
@@ -296,7 +296,7 @@ function CreateProjectDialog({ open, onOpenChange }: { open: boolean; onOpenChan
   const [form, setForm] = useState({ name: "", description: "", color: COLORS[0], icon: ICONS[0], domainId: "", targetDate: "" });
 
   async function save() {
-    if (!form.name.trim()) { toast.error("Name required"); return; }
+    if (!form.name.trim()) { notify.error("Name required"); return; }
     await create.mutateAsync({
       name: form.name.trim(),
       description: form.description,
@@ -305,7 +305,7 @@ function CreateProjectDialog({ open, onOpenChange }: { open: boolean; onOpenChan
       domainId: form.domainId || null,
       targetDate: form.targetDate ? new Date(form.targetDate).toISOString() : null,
     });
-    toast.success("Project created");
+    notify.success("Project created");
     setForm({ name: "", description: "", color: COLORS[0], icon: ICONS[0], domainId: "", targetDate: "" });
     onOpenChange(false);
   }
