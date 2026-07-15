@@ -17,6 +17,16 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-border": "var(--border)",
         } as React.CSSProperties
       }
+      toastOptions={{
+        classNames: {
+          toast: "group-[.toaster]:pr-6",
+          description: "group-[.toast]:text-muted-foreground",
+        },
+      }}
+      visibleToasts={5}
+      gap={8}
+      expand={false}
+      duration={4000}
       {...props}
     />
   )

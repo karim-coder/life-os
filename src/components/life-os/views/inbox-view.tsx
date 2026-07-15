@@ -8,7 +8,7 @@ import { PageHeader, EmptyState } from "../layout";
 import { ItemCard } from "../item-card";
 import { Button } from "@/components/ui/button";
 import { ITEM_TYPE_MAP, ITEM_TYPES, DOMAINS } from "@/lib/constants";
-import { toast } from "sonner";
+import { notify } from "@/lib/toast";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function InboxView() {
@@ -40,7 +40,7 @@ export function InboxView() {
       const res = await fetch("/api/ai/smart-inbox", { method: "POST" });
       const data = await res.json();
       if (data.error) {
-        toast.error(`AI error: ${data.error}`);
+        notify.error(`AI error: ${data.error}`);
         return;
       }
       const mapped: Record<string, any> = {};
@@ -48,9 +48,9 @@ export function InboxView() {
         mapped[s.itemId] = s;
       }
       setAiSuggestions(mapped);
-      toast.success(`AI analyzed ${data.count} inbox items`);
+      notify.success(`AI analyzed ${data.count} inbox items`);
     } catch {
-      toast.error("Failed to run AI processing");
+      notify.error("Failed to run AI processing");
     } finally {
       setAiLoading(false);
     }
@@ -71,7 +71,7 @@ export function InboxView() {
       delete next[itemId];
       return next;
     });
-    toast.success("Item processed");
+    notify.success("Item processed");
   }
 
   function toggle(id: string) {
@@ -87,12 +87,12 @@ export function InboxView() {
     const ids = selected.size ? Array.from(selected) : items.map((i) => i.id);
     await Promise.all(ids.map((id) => update.mutateAsync({ id, [field]: value || null })));
     setSelected(new Set());
-    toast.success(`Processed ${ids.length} item${ids.length > 1 ? "s" : ""}`);
+    notify.success(`Processed ${ids.length} item${ids.length > 1 ? "s" : ""}`);
   }
 
   async function clearInbox() {
     await Promise.all(items.map((i) => update.mutateAsync({ id: i.id, status: "active" })));
-    toast.success("Inbox cleared — all items activated");
+    notify.success("Inbox cleared — all items activated");
   }
 
   return (
@@ -228,7 +228,7 @@ export function InboxView() {
                   </div>
                   <div className="flex flex-shrink-0 gap-1">
                     <button
-                      onClick={() => update.mutate({ id: item.id, status: "active" })}
+                      onClick={() => { update.mutate({ id: item.id, status: "active" }); notify.success("Activated"); }}
                       className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-emerald-500/10 hover:text-emerald-500"
                       title="Activate"
                     >
@@ -242,7 +242,7 @@ export function InboxView() {
                       <Icon name="Pencil" className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => del.mutate(item.id)}
+                      onClick={() => { del.mutate(item.id); notify.success("Deleted"); }}
                       className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-rose-500/10 hover:text-rose-500"
                       title="Delete"
                     >
