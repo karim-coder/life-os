@@ -2,11 +2,22 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useLifeOS } from "@/store/life-os";
-import { useItem, useCreateItem, useUpdateItem, useItems, useDomains } from "@/lib/hooks";
+import { useItem, useCreateItem, useUpdateItem, useDeleteItem, useItems, useDomains } from "@/lib/hooks";
 import { Icon } from "../icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Progress } from "@/components/ui/progress";
 import { motion } from "framer-motion";
 import { notify } from "@/lib/toast";
@@ -51,6 +62,7 @@ export function JournalEditorView() {
   const { data: existingItem, isLoading } = useItem(journalEditId);
   const create = useCreateItem();
   const update = useUpdateItem();
+  const del = useDeleteItem();
   const { data: domData } = useDomains();
 
   const [title, setTitle] = useState("");
@@ -167,6 +179,18 @@ export function JournalEditorView() {
     }
   }
 
+  async function handleDelete() {
+    if (!journalEditId) return;
+    try {
+      await del.mutateAsync(journalEditId);
+      localStorage.removeItem("lifeos-journal-draft");
+      toast.success("Journal entry deleted");
+      setView("mind_soul");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to delete");
+    }
+  }
+
   if (journalEditId && isLoading) {
     return (
       <div className="space-y-4">
@@ -189,6 +213,33 @@ export function JournalEditorView() {
           Back
         </button>
         <div className="flex items-center gap-2">
+          <span className="hidden text-[11px] text-muted-foreground sm:inline">
+            {wordCount} words · {readTime} min
+          </span>
+          {/* Delete button with confirmation — only for existing entries */}
+          {journalEditId && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-1.5 text-rose-500 hover:bg-rose-500/10 hover:text-rose-600">
+                  <Icon name="Trash2" className="h-3.5 w-3.5" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete this journal entry?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently remove &ldquo;{title || "Untitled entry"}&rdquo; and all its data. This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete} className="bg-rose-500 hover:bg-rose-600">
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
           <Button
             variant="ghost"
             size="sm"
