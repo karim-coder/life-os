@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLifeOS } from "@/store/life-os";
-import { useProjects, useProject, useCreateProject, useDeleteProject, useUpdateItem } from "@/lib/hooks";
+import { useProjects, useProject, useCreateProject, useDeleteProject, useUpdateItem, useDomains } from "@/lib/hooks";
 import { Icon } from "../icon";
 import { PageHeader, SectionCard, EmptyState } from "../layout";
 import { ItemCard } from "../item-card";
@@ -292,7 +292,8 @@ function ProjectDetail({ id }: { id: string }) {
 
 function CreateProjectDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const create = useCreateProject();
-  const { data: domData } = useProjects();
+  const { data: domData } = useDomains();
+  const domains = domData?.domains || [];
   const [form, setForm] = useState({ name: "", description: "", color: COLORS[0], icon: ICONS[0], domainId: "", targetDate: "" });
 
   async function save() {
@@ -326,7 +327,26 @@ function CreateProjectDialog({ open, onOpenChange }: { open: boolean; onOpenChan
             <Label className="mb-1.5 block text-xs font-medium text-muted-foreground">Description</Label>
             <Textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <Label className="mb-1.5 block text-xs font-medium text-muted-foreground">Life domain</Label>
+              <Select value={form.domainId || "none"} onValueChange={(value) => setForm({ ...form, domainId: value === "none" ? "" : value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="No domain" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">No domain</SelectItem>
+                  {domains.map((domain: any) => (
+                    <SelectItem key={domain.id} value={domain.id}>
+                      <span className="inline-flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full" style={{ background: domain.color }} />
+                        {domain.name}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <div>
               <Label className="mb-1.5 block text-xs font-medium text-muted-foreground">Target date</Label>
               <Input type="date" value={form.targetDate} onChange={(e) => setForm({ ...form, targetDate: e.target.value })} />
