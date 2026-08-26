@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useLifeOS } from "@/store/life-os";
 import { useSearch } from "@/lib/hooks";
 import { Icon } from "./icon";
@@ -15,12 +15,15 @@ import {
 } from "@/components/ui/popover";
 import { useTheme } from "next-themes";
 
+const emptySubscribe = () => () => {};
+
 export function Topbar() {
   const { setQuickCaptureOpen, openItemDetail, setView } = useLifeOS();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const { data } = useSearch(q);
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
   const results = data && q ? data : { items: [], projects: [], tags: [] };
 
@@ -107,10 +110,11 @@ export function Topbar() {
           variant="ghost"
           size="icon"
           className="h-9 w-9"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          aria-label="Toggle theme"
+          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+          disabled={!mounted}
+          aria-label={mounted && resolvedTheme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
         >
-          <Icon name={theme === "dark" ? "Sun" : "Moon"} className="h-4 w-4" />
+          <Icon name={mounted && resolvedTheme === "dark" ? "Sun" : "Moon"} className="h-4 w-4" />
         </Button>
 
         <Button

@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { notify } from "@/lib/toast";
 import QRCode from "qrcode";
+import { useTheme } from "next-themes";
 import { requestNotificationPermission, sendNotification } from "../notifications";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
@@ -31,6 +32,7 @@ import {
 
 export function SettingsView() {
   const { setView } = useLifeOS();
+  const { theme = "system", setTheme } = useTheme();
   const [loading, setLoading] = useState(true);
   const [prefs, setPrefs] = useState<any>(null);
 
@@ -43,8 +45,6 @@ export function SettingsView() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  const [theme, setTheme] = useState<"light" | "dark" | "system">("light");
-
   // QR login from settings
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [qrLoginUrl, setQrLoginUrl] = useState("");
@@ -55,8 +55,6 @@ export function SettingsView() {
     fetch("/api/auth/session").then(r => r.json()).then(d => setEmail(d.email || ""));
     fetch("/api/preferences").then(r => r.json()).then(d => { setPrefs(d); setName(d.name || ""); setLoading(false); });
     fetch("/api/auth/2fa-status").then(r => r.json()).then(d => { setTwoFAEnabled(d.enabled); setName(d.name || ""); });
-    const savedTheme = localStorage.getItem("theme") || "light";
-    setTheme(savedTheme as any);
   }, []);
 
   async function updatePrefs(patch: any) {
@@ -102,9 +100,7 @@ export function SettingsView() {
   }
 
   function applyTheme(t: "light" | "dark" | "system") {
-    setTheme(t); localStorage.setItem("theme", t);
-    if (t === "dark") document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
+    setTheme(t);
     notify.success(`Theme: ${t}`);
   }
 
