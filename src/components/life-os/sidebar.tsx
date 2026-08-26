@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -157,6 +158,7 @@ export function Sidebar() {
         <SheetContent side="left" className="w-72 p-0">
           <SheetHeader className="sr-only">
             <SheetTitle>Navigation</SheetTitle>
+            <SheetDescription>Navigate between Life OS views and life domains.</SheetDescription>
           </SheetHeader>
           <div className="flex h-full flex-col">
             <SidebarContent onNavigate={closeMobile} />
