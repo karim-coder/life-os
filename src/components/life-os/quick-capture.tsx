@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLifeOS } from "@/store/life-os";
 import { useQuickCapture, useCreateItem, useDomains, useProjects } from "@/lib/hooks";
 import {
@@ -17,14 +17,15 @@ import { notify } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 
 const QUICK_TYPES = ["note", "task", "idea", "journal", "bookmark", "contact"] as const;
+const emptySubscribe = () => () => {};
 
 /** Detect macOS for displaying correct modifier symbols */
 function useIsMac() {
-  const [isMac, setIsMac] = useState(false);
-  useEffect(() => {
-    setIsMac(navigator.platform?.toUpperCase().includes("MAC") ?? false);
-  }, []);
-  return isMac;
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => navigator.platform?.toUpperCase().includes("MAC") ?? false,
+    () => false,
+  );
 }
 
 /** Reusable kbd badge component for shortcut hints */

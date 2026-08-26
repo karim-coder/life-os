@@ -140,23 +140,20 @@ export function FocusView() {
               const todayKey = new Date().toISOString().slice(0, 10);
               toggleHabit.mutate({ id: selectedItemId, date: todayKey });
               const habitName = habits.find((h) => h.id === selectedItemId)?.title;
-              notify.success(`Focus complete! ${elapsedMins} min`, {
-                description: `✓ ${habitName} logged for today. Take a break!`,
-              });
+              notify.success(
+                `Focus complete! ${elapsedMins} min`,
+                `✓ ${habitName} logged for today. Take a break!`,
+              );
             } else if (selectedItemType === "task" && selectedItemId) {
-              notify.success(`Focus complete! ${elapsedMins} min`, {
-                description: "Great work. Take a short break.",
-              });
+              notify.success(`Focus complete! ${elapsedMins} min`, "Great work. Take a short break.");
             } else {
-              notify.success(`Focus complete! ${elapsedMins} min`, {
-                description: "Take a short break.",
-              });
+              notify.success(`Focus complete! ${elapsedMins} min`, "Take a short break.");
             }
 
             // auto-suggest break
             setTimeout(() => switchMode(newSessions % 4 === 0 ? "long" : "short"), 800);
           } else {
-            notify.success("Break over — back to focus!", { description: "You've got this." });
+            notify.success("Break over — back to focus!", "You've got this.");
             setTimeout(() => switchMode("focus"), 800);
           }
           return 0;

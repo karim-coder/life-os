@@ -32,7 +32,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { keys: ["⌘", "Enter"], desc: "Create as active item", icon: "PlusCircle" },
       { keys: ["Shift", "Enter"], desc: "New line in text", icon: "CornerDownLeft" },
       { keys: ["Esc"], desc: "Close dialog", icon: "X" },
-      { keys: ["1"–"6"], desc: "Switch item type", icon: "ListFilter" },
+      { keys: ["1–6"], desc: "Switch item type", icon: "ListFilter" },
     ],
   },
   {

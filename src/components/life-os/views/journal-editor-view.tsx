@@ -73,25 +73,19 @@ export function JournalEditorView() {
   const [showPreview, setShowPreview] = useState(false);
   const [saved, setSaved] = useState(false);
   const [lastKey, setLastKey] = useState("");
-  const [dailyGoal, setDailyGoal] = useState(DEFAULT_DAILY_GOAL);
+  const [dailyGoal, setDailyGoal] = useState(getWritingGoal);
   const [showGoalInput, setShowGoalInput] = useState(false);
-  const [goalInput, setGoalInput] = useState(String(DEFAULT_DAILY_GOAL));
+  const [goalInput, setGoalInput] = useState(() => String(getWritingGoal()));
 
   const domains = domData?.domains || [];
   const mindSoulDomain = domains.find((d: any) => d.key === "mind_soul");
-
-  // Load writing goal from localStorage
-  useEffect(() => {
-    setDailyGoal(getWritingGoal());
-    setGoalInput(String(getWritingGoal()));
-  }, []);
 
   const handleGoalSave = useCallback(() => {
     const val = parseInt(goalInput, 10);
     if (val > 0) {
       setDailyGoal(val);
       localStorage.setItem(GOAL_STORAGE_KEY, String(val));
-      toast.success(`Daily goal set to ${val} words`);
+      notify.success(`Daily goal set to ${val} words`);
     }
     setShowGoalInput(false);
   }, [goalInput]);
@@ -184,10 +178,10 @@ export function JournalEditorView() {
     try {
       await del.mutateAsync(journalEditId);
       localStorage.removeItem("lifeos-journal-draft");
-      toast.success("Journal entry deleted");
+      notify.success("Journal entry deleted");
       setView("mind_soul");
     } catch (e: any) {
-      toast.error(e.message || "Failed to delete");
+      notify.error(e.message || "Failed to delete");
     }
   }
 
@@ -214,7 +208,7 @@ export function JournalEditorView() {
         </button>
         <div className="flex items-center gap-2">
           <span className="hidden text-[11px] text-muted-foreground sm:inline">
-            {wordCount} words · {readTime} min
+            {stats.words} words · {stats.readTime} min
           </span>
           {/* Delete button with confirmation — only for existing entries */}
           {journalEditId && (
