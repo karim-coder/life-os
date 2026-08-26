@@ -187,10 +187,38 @@ export function JournalEditorView() {
 
   if (journalEditId && isLoading) {
     return (
-      <div className="space-y-4">
-        <div className="h-10 w-48 animate-pulse rounded-lg bg-muted/40" />
-        <div className="h-12 w-full animate-pulse rounded-lg bg-muted/30" />
-        <div className="h-64 w-full animate-pulse rounded-xl bg-muted/20" />
+      <div aria-busy="true" aria-label="Loading journal entry">
+        <div className="sticky top-0 z-20 -mx-4 mb-4 flex items-center justify-between border-b border-border/40 bg-background/80 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6">
+          <div className="skeleton h-4 w-14 rounded" />
+          <div className="flex items-center gap-2">
+            <div className="skeleton hidden h-3 w-24 rounded sm:block" />
+            <div className="skeleton h-8 w-8 rounded-md" />
+            <div className="skeleton h-8 w-20 rounded-md" />
+            <div className="skeleton h-8 w-20 rounded-md" />
+          </div>
+        </div>
+
+        <div className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
+          <div className="flex items-center justify-between border-b border-border/40 bg-muted/20 px-5 py-2.5">
+            <div className="skeleton h-3 w-40 rounded" />
+            <div className="flex gap-1">
+              {Array.from({ length: 5 }).map((_, i) => <div key={i} className="skeleton h-6 w-6 rounded-md" />)}
+            </div>
+          </div>
+          <div className="px-5 pt-5">
+            <div className="skeleton h-8 w-2/3 rounded-lg" />
+          </div>
+          <div className="space-y-3 px-5 py-4">
+            <div className="skeleton h-10 w-full rounded-lg" />
+            <div className="skeleton h-72 w-full rounded-xl" />
+          </div>
+          <div className="border-t border-border/40 bg-muted/20 px-5 py-3">
+            <div className="flex items-center justify-between gap-4">
+              <div className="skeleton h-7 w-36 rounded-md" />
+              <div className="skeleton h-3 w-40 rounded" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

@@ -56,16 +56,16 @@ export function ReviewsView() {
               {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="rounded-2xl border border-border/60 bg-card/40 p-4">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 animate-pulse rounded-xl bg-muted/60" />
+                    <div className="h-10 w-10 skeleton rounded-xl bg-muted/60" />
                     <div className="flex-1 space-y-2">
-                      <div className="h-4 w-32 animate-pulse rounded bg-muted/60" />
-                      <div className="h-2.5 w-20 animate-pulse rounded bg-muted/40" />
+                      <div className="h-4 w-32 skeleton rounded bg-muted/60" />
+                      <div className="h-2.5 w-20 skeleton rounded bg-muted/40" />
                     </div>
-                    <div className="h-4 w-4 animate-pulse rounded bg-muted/40" />
+                    <div className="h-4 w-4 skeleton rounded bg-muted/40" />
                   </div>
                   <div className="mt-3 space-y-1.5">
-                    <div className="h-2.5 w-full animate-pulse rounded bg-muted/40" />
-                    <div className="h-2.5 w-3/4 animate-pulse rounded bg-muted/30" />
+                    <div className="h-2.5 w-full skeleton rounded bg-muted/40" />
+                    <div className="h-2.5 w-3/4 skeleton rounded bg-muted/30" />
                   </div>
                 </div>
               ))}

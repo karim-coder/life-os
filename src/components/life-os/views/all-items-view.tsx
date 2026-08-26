@@ -101,7 +101,7 @@ export function AllItemsView() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-2">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-16 animate-pulse rounded-xl bg-muted/40" />)}</div>
+        <div className="space-y-2">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-16 skeleton rounded-xl bg-muted/40" />)}</div>
       ) : items.length === 0 ? (
         <EmptyState icon="Layers" title="No items match" description="Try clearing filters or capturing something new." />
       ) : (

@@ -254,15 +254,15 @@ export function GraphView() {
               <div className="flex h-full items-center justify-center">
                 <div className="relative h-64 w-64">
                   {/* Placeholder nodes skeleton mimicking the graph layout */}
-                  <div className="absolute left-1/2 top-1/4 h-10 w-10 -translate-x-1/2 animate-pulse rounded-full bg-muted/40" />
-                  <div className="absolute left-1/4 top-1/3 h-8 w-8 animate-pulse rounded-full bg-muted/30" />
-                  <div className="absolute left-2/3 top-1/3 h-8 w-8 animate-pulse rounded-full bg-muted/30" />
-                  <div className="absolute left-1/3 top-1/2 h-9 w-9 animate-pulse rounded-full bg-muted/40" />
-                  <div className="absolute left-3/5 top-1/2 h-7 w-7 animate-pulse rounded-full bg-muted/30" />
-                  <div className="absolute left-1/2 top-2/3 h-8 w-8 -translate-x-1/2 animate-pulse rounded-full bg-muted/30" />
-                  <div className="absolute left-1/4 top-2/3 h-7 w-7 animate-pulse rounded-full bg-muted/30" />
-                  <div className="absolute left-3/4 top-2/3 h-9 w-9 animate-pulse rounded-full bg-muted/40" />
-                  <div className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 animate-pulse rounded-full bg-muted/20" />
+                  <div className="absolute left-1/2 top-1/4 h-10 w-10 -translate-x-1/2 skeleton rounded-full bg-muted/40" />
+                  <div className="absolute left-1/4 top-1/3 h-8 w-8 skeleton rounded-full bg-muted/30" />
+                  <div className="absolute left-2/3 top-1/3 h-8 w-8 skeleton rounded-full bg-muted/30" />
+                  <div className="absolute left-1/3 top-1/2 h-9 w-9 skeleton rounded-full bg-muted/40" />
+                  <div className="absolute left-3/5 top-1/2 h-7 w-7 skeleton rounded-full bg-muted/30" />
+                  <div className="absolute left-1/2 top-2/3 h-8 w-8 -translate-x-1/2 skeleton rounded-full bg-muted/30" />
+                  <div className="absolute left-1/4 top-2/3 h-7 w-7 skeleton rounded-full bg-muted/30" />
+                  <div className="absolute left-3/4 top-2/3 h-9 w-9 skeleton rounded-full bg-muted/40" />
+                  <div className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 skeleton rounded-full bg-muted/20" />
                   <p className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm text-muted-foreground">Weaving your brain…</p>
                 </div>
               </div>

@@ -87,7 +87,7 @@ export function AgendaView() {
       {/* 7-day columns */}
       {isLoading ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-7">
-          {Array.from({ length: 7 }).map((_, i) => <div key={i} className="h-48 animate-pulse rounded-xl bg-muted/40" />)}
+          {Array.from({ length: 7 }).map((_, i) => <div key={i} className="h-48 skeleton rounded-xl bg-muted/40" />)}
         </div>
       ) : days.every((d) => d.items.length === 0) ? (
         <EmptyState

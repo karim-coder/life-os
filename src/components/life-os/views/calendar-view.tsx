@@ -96,10 +96,10 @@ export function CalendarView() {
             {isLoading ? (
               Array.from({ length: 35 }).map((_, i) => (
                 <div key={i} className="min-h-[88px] border-b border-r border-border/40 p-1.5">
-                  <div className="mb-1 h-5 w-5 animate-pulse rounded-full bg-muted/40" />
+                  <div className="mb-1 h-5 w-5 skeleton rounded-full bg-muted/40" />
                   <div className="space-y-1">
-                    <div className="h-3 w-full animate-pulse rounded bg-muted/30" />
-                    {i % 3 === 0 && <div className="h-3 w-2/3 animate-pulse rounded bg-muted/30" />}
+                    <div className="h-3 w-full skeleton rounded bg-muted/30" />
+                    {i % 3 === 0 && <div className="h-3 w-2/3 skeleton rounded bg-muted/30" />}
                   </div>
                 </div>
               ))

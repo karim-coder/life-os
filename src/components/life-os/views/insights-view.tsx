@@ -21,10 +21,29 @@ export function InsightsView() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
-        <PageHeader title="Insights" subtitle="Patterns and trends across your life." icon="TrendingUp" color="#10b981" />
+      <div className="space-y-6" aria-busy="true" aria-label="Loading insights">
+        <PageHeader title="Insights" subtitle="Patterns and trends across your life — mood, habits, activity, and finances." icon="TrendingUp" color="#10b981" />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-2.5 rounded-xl border border-border/60 bg-card/40 px-3 py-2.5">
+              <div className="skeleton h-8 w-8 shrink-0 rounded-lg" />
+              <div className="flex-1 space-y-1.5">
+                <div className="skeleton h-5 w-12 rounded" />
+                <div className="skeleton h-2.5 w-20 max-w-full rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
         <div className="grid gap-6 lg:grid-cols-2">
-          {Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-64 animate-pulse rounded-2xl bg-muted/40" />)}
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="rounded-2xl border border-border/60 bg-card/50 p-4">
+              <div className="mb-4 flex items-center gap-2">
+                <div className="skeleton h-4 w-4 rounded" />
+                <div className="skeleton h-4 w-32 rounded" />
+              </div>
+              <div className="skeleton h-52 rounded-xl" />
+            </div>
+          ))}
         </div>
       </div>
     );

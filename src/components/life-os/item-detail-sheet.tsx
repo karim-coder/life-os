@@ -938,23 +938,23 @@ function DetailSkeleton() {
   return (
     <div className="flex h-full flex-col">
       <div className="px-6 pb-5 pt-6">
-        <div className="mb-3 h-3 w-40 animate-pulse rounded bg-muted/60" />
+        <div className="mb-3 h-3 w-40 skeleton rounded bg-muted/60" />
         <div className="flex items-start gap-3">
-          <div className="h-12 w-12 animate-pulse rounded-2xl bg-muted/60" />
+          <div className="h-12 w-12 skeleton rounded-2xl bg-muted/60" />
           <div className="flex-1 space-y-2">
-            <div className="h-6 w-3/4 animate-pulse rounded bg-muted/60" />
-            <div className="h-3 w-1/2 animate-pulse rounded bg-muted/40" />
+            <div className="h-6 w-3/4 skeleton rounded bg-muted/60" />
+            <div className="h-3 w-1/2 skeleton rounded bg-muted/40" />
           </div>
         </div>
         <div className="mt-3 flex gap-1.5">
-          <div className="h-5 w-16 animate-pulse rounded-full bg-muted/60" />
-          <div className="h-5 w-20 animate-pulse rounded-full bg-muted/40" />
+          <div className="h-5 w-16 skeleton rounded-full bg-muted/60" />
+          <div className="h-5 w-20 skeleton rounded-full bg-muted/40" />
         </div>
       </div>
       <div className="flex-1 space-y-4 px-6 py-5">
-        <div className="h-20 animate-pulse rounded-xl bg-muted/40" />
-        <div className="h-32 animate-pulse rounded-xl bg-muted/30" />
-        <div className="h-24 animate-pulse rounded-xl bg-muted/30" />
+        <div className="h-20 skeleton rounded-xl bg-muted/40" />
+        <div className="h-32 skeleton rounded-xl bg-muted/30" />
+        <div className="h-24 skeleton rounded-xl bg-muted/30" />
       </div>
     </div>
   );

@@ -90,12 +90,12 @@ export function SanctuaryView() {
         {/* Daily affirmation skeleton */}
         <div className="relative overflow-hidden rounded-3xl border border-violet-500/20 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/5 to-transparent p-8 text-center">
           <div className="mx-auto max-w-2xl space-y-3">
-            <div className="mx-auto h-4 w-32 animate-pulse rounded bg-muted/40" />
-            <div className="mx-auto h-8 w-96 animate-pulse rounded bg-muted/40" />
-            <div className="mx-auto h-4 w-48 animate-pulse rounded bg-muted/30" />
+            <div className="mx-auto h-4 w-32 skeleton rounded bg-muted/40" />
+            <div className="mx-auto h-8 w-96 skeleton rounded bg-muted/40" />
+            <div className="mx-auto h-4 w-48 skeleton rounded bg-muted/30" />
             <div className="mt-4 flex justify-center gap-2">
-              <div className="h-8 w-28 animate-pulse rounded-md bg-muted/30" />
-              <div className="h-8 w-32 animate-pulse rounded-md bg-muted/30" />
+              <div className="h-8 w-28 skeleton rounded-md bg-muted/30" />
+              <div className="h-8 w-32 skeleton rounded-md bg-muted/30" />
             </div>
           </div>
         </div>
@@ -106,8 +106,8 @@ export function SanctuaryView() {
             <div className="flex flex-col items-center justify-center py-8">
               <h3 className="mb-1 text-sm font-semibold uppercase tracking-wide text-muted-foreground">Box Breathing</h3>
               <p className="mb-8 text-xs text-muted-foreground">4-4-6-2 pattern to calm your nervous system</p>
-              <div className="h-40 w-40 animate-pulse rounded-full bg-muted/30" />
-              <div className="mt-8 h-10 w-36 animate-pulse rounded-lg bg-muted/40" />
+              <div className="h-40 w-40 skeleton rounded-full bg-muted/30" />
+              <div className="mt-8 h-10 w-36 skeleton rounded-lg bg-muted/40" />
             </div>
           </SectionCard>
 
@@ -117,10 +117,10 @@ export function SanctuaryView() {
               {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="rounded-xl border border-border/40 bg-gradient-to-br from-violet-500/5 to-transparent p-4">
                   <div className="flex items-start gap-3">
-                    <div className="h-8 w-8 animate-pulse rounded-lg bg-muted/40" />
+                    <div className="h-8 w-8 skeleton rounded-lg bg-muted/40" />
                     <div className="flex-1 space-y-2">
-                      <div className="h-4 w-2/3 animate-pulse rounded bg-muted/40" />
-                      <div className="h-3 w-full animate-pulse rounded bg-muted/30" />
+                      <div className="h-4 w-2/3 skeleton rounded bg-muted/40" />
+                      <div className="h-3 w-full skeleton rounded bg-muted/30" />
                     </div>
                   </div>
                 </div>
@@ -135,11 +135,11 @@ export function SanctuaryView() {
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="rounded-xl border border-border/40 p-4">
                 <div className="mb-2 flex items-center gap-2">
-                  <div className="h-3 w-3 animate-pulse rounded bg-muted/30" />
-                  <div className="h-3 w-24 animate-pulse rounded bg-muted/30" />
+                  <div className="h-3 w-3 skeleton rounded bg-muted/30" />
+                  <div className="h-3 w-24 skeleton rounded bg-muted/30" />
                 </div>
-                <div className="h-4 w-2/3 animate-pulse rounded bg-muted/40" />
-                <div className="mt-2 h-3 w-full animate-pulse rounded bg-muted/30" />
+                <div className="h-4 w-2/3 skeleton rounded bg-muted/40" />
+                <div className="mt-2 h-3 w-full skeleton rounded bg-muted/30" />
               </div>
             ))}
           </div>

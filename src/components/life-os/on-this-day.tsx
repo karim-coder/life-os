@@ -14,10 +14,10 @@ export function OnThisDay() {
   if (isLoading) {
     return (
       <div className="rounded-2xl border border-border/60 bg-card/40 p-4">
-        <div className="h-4 w-24 animate-pulse rounded bg-muted/50" />
+        <div className="h-4 w-24 skeleton rounded bg-muted/50" />
         <div className="mt-3 space-y-2">
           {Array.from({ length: 2 }).map((_, i) => (
-            <div key={i} className="h-12 animate-pulse rounded-lg bg-muted/40" />
+            <div key={i} className="h-12 skeleton rounded-lg bg-muted/40" />
           ))}
         </div>
       </div>

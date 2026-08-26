@@ -50,7 +50,7 @@ export function DomainView({ domainKey }: { domainKey: string }) {
   const qtypes = quickTypes[domainKey] || ["task", "note"];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" aria-busy={isLoading}>
       <PageHeader
         title={domainMeta.name}
         subtitle={domainMeta.description}
@@ -80,10 +80,21 @@ export function DomainView({ domainKey }: { domainKey: string }) {
       >
         <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-20 blur-3xl" style={{ background: domainMeta.color }} />
         <div className="relative grid gap-4 sm:grid-cols-4">
-          <Stat label="Total items" value={items.length} />
-          <Stat label="Done" value={items.filter((i) => i.status === "done").length} />
-          <Stat label="Active" value={items.filter((i) => i.status === "active").length} />
-          <Stat label="Types" value={types.length} />
+          {isLoading ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="space-y-2">
+                <div className="skeleton h-7 w-12 rounded" />
+                <div className="skeleton h-3 w-16 rounded" />
+              </div>
+            ))
+          ) : (
+            <>
+              <Stat label="Total items" value={items.length} />
+              <Stat label="Done" value={items.filter((i) => i.status === "done").length} />
+              <Stat label="Active" value={items.filter((i) => i.status === "active").length} />
+              <Stat label="Types" value={types.length} />
+            </>
+          )}
         </div>
       </motion.div>
 
@@ -147,25 +158,9 @@ export function DomainView({ domainKey }: { domainKey: string }) {
         </div>
       )}
 
-      {/* Hero domain card skeleton */}
-      {isLoading && (
-        <div className="space-y-6">
-          <div className="relative overflow-hidden rounded-3xl border border-border/60 p-6">
-            <div className="grid gap-4 sm:grid-cols-4">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="space-y-2">
-                  <div className="h-7 w-12 animate-pulse rounded bg-muted/40" />
-                  <div className="h-3 w-16 animate-pulse rounded bg-muted/30" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Items */}
       {isLoading ? (
-        <div className="grid gap-3 sm:grid-cols-2">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-20 animate-pulse rounded-xl bg-muted/40" />)}</div>
+        <div className="grid gap-3 sm:grid-cols-2">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-20 skeleton rounded-xl bg-muted/40" />)}</div>
       ) : filteredItems.length === 0 ? (
         <EmptyState
           icon={domainMeta.icon}

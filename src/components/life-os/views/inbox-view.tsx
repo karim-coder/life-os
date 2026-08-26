@@ -154,18 +154,18 @@ export function InboxView() {
         <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/40 p-3">
-              <div className="h-5 w-5 animate-pulse rounded-md bg-muted/60" />
+              <div className="h-5 w-5 skeleton rounded-md bg-muted/60" />
               <div className="flex-1 space-y-2">
-                <div className="h-4 w-2/3 animate-pulse rounded bg-muted/60" />
+                <div className="h-4 w-2/3 skeleton rounded bg-muted/60" />
                 <div className="flex gap-2">
-                  <div className="h-3 w-16 animate-pulse rounded bg-muted/40" />
-                  <div className="h-3 w-12 animate-pulse rounded bg-muted/40" />
+                  <div className="h-3 w-16 skeleton rounded bg-muted/40" />
+                  <div className="h-3 w-12 skeleton rounded bg-muted/40" />
                 </div>
               </div>
               <div className="flex gap-1">
-                <div className="h-8 w-8 animate-pulse rounded-lg bg-muted/40" />
-                <div className="h-8 w-8 animate-pulse rounded-lg bg-muted/40" />
-                <div className="h-8 w-8 animate-pulse rounded-lg bg-muted/40" />
+                <div className="h-8 w-8 skeleton rounded-lg bg-muted/40" />
+                <div className="h-8 w-8 skeleton rounded-lg bg-muted/40" />
+                <div className="h-8 w-8 skeleton rounded-lg bg-muted/40" />
               </div>
             </div>
           ))}
