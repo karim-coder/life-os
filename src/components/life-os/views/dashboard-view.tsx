@@ -41,27 +41,28 @@ export function DashboardView() {
   const lastReview = reviewData?.reviews?.[0];
   const reviewAge = lastReview ? Math.floor((today.getTime() - new Date(lastReview.date).getTime()) / 86400000) : 999;
 
-  if (isLoading || tasksLoading) {
+  if (isLoading || tasksLoading || projectsLoading || reviewsLoading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6" aria-busy="true" aria-label="Loading dashboard">
         {/* Hero skeleton */}
         <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-transparent p-6">
-          <div className="space-y-3">
-            <div className="h-4 w-32 animate-pulse rounded bg-muted/40" />
-            <div className="h-8 w-72 animate-pulse rounded bg-muted/40" />
-            <div className="h-4 w-48 animate-pulse rounded bg-muted/30" />
+          <div className="space-y-2">
+            <div className="skeleton h-4 w-28 rounded" />
+            <div className="skeleton h-9 w-72 max-w-full rounded-lg" />
+            <div className="skeleton h-4 w-44 rounded" />
           </div>
+          <div className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-emerald-500/10 blur-3xl" />
         </div>
 
         {/* Stat pills skeleton */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="rounded-2xl border border-border/60 bg-card/60 p-4">
-              <div className="flex items-center gap-2">
-                <div className="h-5 w-5 animate-pulse rounded bg-muted/40" />
-                <div className="h-3 w-16 animate-pulse rounded bg-muted/30" />
+            <div key={i} className="flex items-center gap-2.5 rounded-xl border border-border/60 bg-card/40 px-3 py-2.5">
+              <div className="skeleton h-8 w-8 shrink-0 rounded-lg" />
+              <div className="flex-1 space-y-1.5">
+                <div className="skeleton h-5 w-10 rounded" />
+                <div className="skeleton h-2.5 w-16 rounded" />
               </div>
-              <div className="mt-2 h-7 w-12 animate-pulse rounded bg-muted/40" />
             </div>
           ))}
         </div>
@@ -70,62 +71,98 @@ export function DashboardView() {
           {/* Main column skeleton */}
           <div className="space-y-6 lg:col-span-2">
             {/* Today's focus skeleton */}
-            <div className="rounded-2xl border border-border/60 bg-card/40 p-5">
-              <div className="mb-4 flex items-center justify-between">
-                <div className="h-5 w-24 animate-pulse rounded bg-muted/40" />
-                <div className="h-8 w-20 animate-pulse rounded bg-muted/30" />
+            <div className="rounded-2xl border border-border/60 bg-card/50 p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="skeleton h-4 w-4 rounded" />
+                  <div className="skeleton h-4 w-24 rounded" />
+                </div>
+                <div className="skeleton h-8 w-24 rounded-md" />
               </div>
               <div className="space-y-2">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="flex items-center gap-3 rounded-xl border border-border/40 p-3">
-                    <div className="h-5 w-5 animate-pulse rounded-md bg-muted/40" />
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="relative flex items-start gap-3 rounded-xl border border-border/60 bg-card/60 p-3">
+                    <div className="skeleton absolute bottom-3 left-0 top-3 w-1 rounded-full" />
+                    <div className="skeleton ml-1.5 h-5 w-5 shrink-0 rounded-md" />
                     <div className="flex-1 space-y-1.5">
-                      <div className="h-4 w-2/3 animate-pulse rounded bg-muted/40" />
-                      <div className="h-3 w-1/3 animate-pulse rounded bg-muted/30" />
+                      <div className="skeleton h-4 w-2/3 rounded" />
+                      <div className="skeleton h-3 w-2/5 rounded" />
                     </div>
+                    <div className="skeleton h-5 w-12 rounded-md" />
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Active threads skeleton */}
-            <div className="rounded-2xl border border-border/60 bg-card/40 p-5">
-              <div className="mb-4 flex items-center justify-between">
-                <div className="h-5 w-28 animate-pulse rounded bg-muted/40" />
-                <div className="h-8 w-16 animate-pulse rounded bg-muted/30" />
+            <div className="rounded-2xl border border-border/60 bg-card/50 p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="skeleton h-4 w-4 rounded" />
+                  <div className="skeleton h-4 w-28 rounded" />
+                </div>
+                <div className="skeleton h-8 w-16 rounded-md" />
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 {Array.from({ length: 4 }).map((_, i) => (
                   <div key={i} className="rounded-xl border border-border/40 p-4">
                     <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 animate-pulse rounded-full bg-muted/40" />
-                      <div className="h-4 w-2/3 animate-pulse rounded bg-muted/40" />
+                      <div className="skeleton h-3 w-3 rounded-full" />
+                      <div className="skeleton h-4 w-2/3 rounded" />
                     </div>
-                    <div className="mt-2 h-3 w-full animate-pulse rounded bg-muted/30" />
+                    <div className="skeleton mt-2 h-3 w-full rounded" />
                     <div className="mt-3">
                       <div className="mb-1 flex justify-between">
-                        <div className="h-2.5 w-12 animate-pulse rounded bg-muted/30" />
-                        <div className="h-2.5 w-8 animate-pulse rounded bg-muted/30" />
+                        <div className="skeleton h-2.5 w-12 rounded" />
+                        <div className="skeleton h-2.5 w-8 rounded" />
                       </div>
-                      <div className="h-1.5 w-full animate-pulse rounded-full bg-muted/30" />
+                      <div className="skeleton h-1.5 w-full rounded-full" />
                     </div>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Habits and life balance skeleton */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              {Array.from({ length: 2 }).map((_, cardIndex) => (
+                <div key={cardIndex} className="rounded-2xl border border-border/60 bg-card/50 p-4">
+                  <div className="mb-3 flex items-center gap-2">
+                    <div className="skeleton h-4 w-4 rounded" />
+                    <div className="skeleton h-4 w-24 rounded" />
+                  </div>
+                  <div className="space-y-2.5">
+                    {Array.from({ length: 4 }).map((_, rowIndex) => (
+                      <div key={rowIndex} className="space-y-1.5">
+                        <div className="flex justify-between gap-3">
+                          <div className="skeleton h-3 w-20 rounded" />
+                          <div className="skeleton h-3 w-7 rounded" />
+                        </div>
+                        <div className="skeleton h-1.5 w-full rounded-full" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Right sidebar skeleton */}
           <div className="space-y-4">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="rounded-2xl border border-border/60 bg-card/40 p-5">
-                <div className="mb-3 flex items-center gap-2">
-                  <div className="h-4 w-4 animate-pulse rounded bg-muted/40" />
-                  <div className="h-4 w-20 animate-pulse rounded bg-muted/40" />
+            {["h-52", "h-32", "h-24", "h-40", "h-28"].map((height, i) => (
+              <div key={i} className="rounded-2xl border border-border/60 bg-card/50 p-4">
+                <div className="mb-4 flex items-center gap-2">
+                  <div className="skeleton h-4 w-4 rounded" />
+                  <div className="skeleton h-4 w-24 rounded" />
                 </div>
-                <div className="space-y-2">
-                  <div className="h-3 w-full animate-pulse rounded bg-muted/30" />
-                  <div className="h-3 w-3/4 animate-pulse rounded bg-muted/30" />
+                <div className={`space-y-2 ${height}`}>
+                  <div className="skeleton h-3 w-full rounded" />
+                  <div className="skeleton h-3 w-3/4 rounded" />
+                  {i === 0 && (
+                    <div className="flex justify-between pt-3">
+                      {Array.from({ length: 5 }).map((_, j) => <div key={j} className="skeleton h-8 w-8 rounded-full" />)}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
