@@ -8,6 +8,7 @@ import { PageHeader, EmptyState } from "../layout";
 import { ItemCard } from "../item-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ITEM_TYPES, ITEM_TYPE_MAP, DOMAINS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -16,11 +17,15 @@ export function AllItemsView() {
   const [q, setQ] = useState("");
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("active");
+  const [sort, setSort] = useState("updatedAt:desc");
+  const [orderBy, order] = sort.split(":");
 
   const { data, isLoading } = useItems({
     ...(q ? { q } : {}),
     ...(typeFilter ? { type: typeFilter } : {}),
     status: statusFilter,
+    orderBy,
+    order,
   });
   const items = data?.items || [];
 
@@ -45,7 +50,7 @@ export function AllItemsView() {
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search title or content…" className="pl-9" />
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex gap-1 rounded-lg bg-muted p-1">
             {["active", "done", "inbox", "archived", "all"].map((s) => (
               <button
@@ -57,6 +62,18 @@ export function AllItemsView() {
               </button>
             ))}
           </div>
+          <Select value={sort} onValueChange={setSort}>
+            <SelectTrigger className="h-9 w-[170px]" aria-label="Sort items">
+              <Icon name="ArrowUpDown" className="h-3.5 w-3.5 text-muted-foreground" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectItem value="updatedAt:desc">Recently updated</SelectItem>
+              <SelectItem value="createdAt:desc">Recently created</SelectItem>
+              <SelectItem value="dueDate:asc">Due date</SelectItem>
+              <SelectItem value="title:asc">Title A–Z</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="flex flex-wrap gap-1.5">
