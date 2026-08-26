@@ -31,6 +31,7 @@ export function Topbar() {
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border/60 bg-background/80 px-4 backdrop-blur-md">
+      <div className="h-10 w-10 shrink-0 md:hidden" aria-hidden="true" />
       {/* Search */}
       <Popover open={open && q.length > 0} onOpenChange={setOpen}>
         <PopoverAnchor asChild>
